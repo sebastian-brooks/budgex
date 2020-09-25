@@ -1,6 +1,7 @@
 require "csv"
 require "date"
 require_relative("../classes/transaction.rb")
+require_relative("../classes/recurring.rb")
 require_relative("get_date")
 
 def get_id(user)
@@ -14,6 +15,13 @@ end
 
 def get_trans_date
     puts "Please enter the transaction date [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
+    puts "Leave blank to use today's date"
+    date = get_date
+end
+
+def get_recur_start_date
+    puts "Please enter the date you want the recurrence to start [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
+    puts "Leave blank to use today's date"
     date = get_date
 end
 
@@ -101,9 +109,15 @@ def get_freq
     return freq
 end
 
+def get_recur_end_date
+    puts "Enter a date when the recurrence will end [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
+    puts "Leave blank to set maximum (5 years)"
+    date = get_date(1)
+end
 
 def search_trans_by_date(user)
     puts "Please enter a transaction date [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
+    puts "Leave blank for today's date"
     date = get_date
     CSV.foreach("user_transactions/#{user}.csv", headers: true).select { |row|
         if row["date"] == date

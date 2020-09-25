@@ -1,13 +1,13 @@
 require("date")
 
-def get_date
+def get_date(pref=0)
     date = nil
     while date.nil?
-        # puts "Please enter the transaction date [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
-        puts "Leave blank to use today's date"
         date = gets.chomp
-        if date == ""
+        if date == "" && pref == 0
             date = Date.today.to_s
+        elsif date == "" && pref == 1
+            date = Date.today.next_year(5).to_s
         else
             begin
                 Date.iso8601(date)
