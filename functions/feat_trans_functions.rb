@@ -1,40 +1,29 @@
 require "csv"
 require "date"
-
-class Transaction
-    def initialize(user, id, date, amount, description, category, recur=0)
-        @user = user
-        @id = id
-        @date = date
-        @amount = amount
-        @description = description
-        @category = category
-        @recur = recur
-        @trans = {id: @id, date: @date, amount: @amount, description: @description, category: @category, recur: @recur}
-    end
-
-    def add
-        CSV.open("#{@user}.csv", "a") do |row|
-            row << @trans.values.to_a
-        end
-    end
-end
+require_relative("../classes/transaction.rb")
 
 def get_id(user)
-    file = CSV.parse(File.read("#{user}.csv"))
-    new_id = file.size + 1
+    id = []
+    CSV.foreach("user_transactions/#{user}.csv", headers: true) { |row| id << row["id"].to_i }
+    return id.max + 1
 end
 
 def get_trans_date
     date = nil
     while date.nil?
+        puts
         puts "Please enter the transaction date [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
+        puts "Leave blank to use today's date"
         date = gets.chomp
-        begin
-            Date.iso8601(date)
-        rescue ArgumentError
-            date = nil
-            puts "That date is not valid."
+        if date == ""
+            date = Date.today.to_s
+        else
+            begin
+                Date.iso8601(date)
+            rescue ArgumentError
+                date = nil
+                puts "That date is not valid."
+            end
         end
     end
     if date.length < 10
@@ -91,7 +80,7 @@ def get_trans_desc
             puts "Please enter a description of the transaction"
         end
     end
-    return desc
+    return desc.gsub(",", "")
 end
 
 def get_trans_cat
@@ -115,8 +104,14 @@ def get_trans_cat
     return cat
 end
 
+# t_date = get_trans_date
+# t_amt = get_trans_amt
+# t_desc = get_trans_desc
+# t_cat = get_trans_cat
 
-t_date = get_trans_date
-t_amt = get_trans_amt
-t_desc = get_trans_desc
-t_cat = get_trans_cat
+# username = "test"
+# id = get_id(username)
+
+# new_trans = Transaction.new(username, id, t_date, t_amt, t_desc, t_cat)
+
+# new_trans.add
