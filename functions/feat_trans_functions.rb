@@ -1,35 +1,20 @@
 require "csv"
 require "date"
 require_relative("../classes/transaction.rb")
+require_relative("get_date")
 
 def get_id(user)
     id = []
     CSV.foreach("user_transactions/#{user}.csv", headers: true) { |row| id << row["id"].to_i }
+    if id.size == 0
+        id << 0
+    end
     return id.max + 1
 end
 
 def get_trans_date
-    date = nil
-    while date.nil?
-        puts
-        puts "Please enter the transaction date [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
-        puts "Leave blank to use today's date"
-        date = gets.chomp
-        if date == ""
-            date = Date.today.to_s
-        else
-            begin
-                Date.iso8601(date)
-            rescue ArgumentError
-                date = nil
-                puts "That date is not valid."
-            end
-        end
-    end
-    if date.length < 10
-        date = Date.strptime(date, "%y-%m-%d")
-    end
-    return date
+    puts "Please enter the transaction date [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
+    date = get_date
 end
 
 def get_trans_amt
@@ -73,7 +58,7 @@ end
 def get_trans_desc
     desc = nil
     while desc.nil?
-        puts "What was the transaction for?"
+        puts "What is the transaction for?"
         desc = gets.chomp
         if desc == "" || desc.strip() == ""
             desc = nil
@@ -104,14 +89,25 @@ def get_trans_cat
     return cat
 end
 
-# t_date = get_trans_date
-# t_amt = get_trans_amt
-# t_desc = get_trans_desc
-# t_cat = get_trans_cat
+def get_interval
+    puts "What interval will the transactions occur over?"
+    interval = gets.chomp
+    return :month
+end
 
-# username = "test"
-# id = get_id(username)
+def get_freq
+    puts "How frequently do you want this to recur? e,g, every month (enter 1), every 2 months (enter 2) etc?"
+    freq = gets.chomp.to_i
+    return freq
+end
 
-# new_trans = Transaction.new(username, id, t_date, t_amt, t_desc, t_cat)
 
-# new_trans.add
+def search_trans_by_date(user)
+    puts "Please enter a transaction date [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
+    date = get_date
+    CSV.foreach("user_transactions/#{user}.csv", headers: true).select { |row|
+        if row["date"] == date
+            puts "#{row["id"]} | #{row["date"]} | #{row["amount"]} | #{row["description"]} | #{row["category"]}"
+        end
+    }
+end
