@@ -1,6 +1,7 @@
 require_relative("functions/add_transactions")
 require_relative("functions/search_transactions")
 require_relative("functions/get_balance")
+require_relative("functions/user_signup")
 
 # Run login/signup
 # main menu
@@ -18,10 +19,22 @@ require_relative("functions/get_balance")
 #   delete account
 #   logout
 
-username = "test"
+# username = "test"
 
 puts "WELCOME TO BUDGEX - A BUDGET AND EXPENSE TRACKING TOOL"
-puts "Select an option"
+puts "1 - Login"
+puts "2 - Signup"
+
+opt = gets.chomp.to_i
+
+case opt
+when 1
+    user_login
+when 2
+    user_signup
+end
+
+puts "Select an option from the main menu:"
 puts "1 - Add single transaction"
 puts "2 - Setup recurring transaction"
 puts "3 - Search transaction by date"

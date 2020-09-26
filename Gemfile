@@ -13,3 +13,5 @@ gem "csv", "~> 3.1"
 gem "recurrence", "~> 1.3"
 
 gem "rspec", "~> 3.9"
+
+gem "highline", "~> 2.0"

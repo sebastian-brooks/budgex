@@ -1,14 +1,1 @@
-[
-    {
-        "username": "sbrooks",
-        "password": "1234"
-    },
-    {
-        "username": "gjohnson",
-        "password": "deleteit"
-    },
-    {
-        "username": "mrrobot",
-        "password": "drydrydry"
-    }
-]
+{"users":[{"username":"sbrooks","password":"12345678"},{"username":"gjohnson","password":"deleteit"},{"username":"mrrobot","password":"drydrydry"},{"username":"test","password":"password1234"},{"username":"steve","password":"dogodogodog"}]}

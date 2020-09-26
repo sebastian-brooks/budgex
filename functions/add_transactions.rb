@@ -60,7 +60,7 @@ def get_trans_amt
             begin
                 Float(amt)
             rescue
-                puts 'That is an invalid amount'
+                puts "That is an invalid amount"
                 amt = nil
             end
         end
@@ -140,13 +140,13 @@ def get_freq
         begin
             freq.empty?
         rescue
-            puts 'That is an invalid frequency - please enter a whole number greater than 0'
+            puts "That is an invalid frequency - please enter a whole number greater than 0"
             freq = nil
         end
         begin
             Integer(freq)
         rescue
-            puts 'That is an invalid frequency - please enter a whole number greater than 0'
+            puts "That is an invalid frequency - please enter a whole number greater than 0"
             freq = nil
         end
     end
