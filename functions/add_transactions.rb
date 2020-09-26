@@ -3,6 +3,7 @@ require "date"
 require_relative("../classes/transaction.rb")
 require_relative("../classes/recurring.rb")
 require_relative("get_date")
+require_relative("sort_csv")
 
 def get_id(user)
     id = []
@@ -14,15 +15,23 @@ def get_id(user)
 end
 
 def get_trans_date
-    puts "Please enter the transaction date [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
-    puts "Leave blank to use today's date"
-    date = get_date
+    date = nil
+    while date.nil?
+        puts "Please enter the transaction date [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
+        puts "Leave blank to use today's date"
+        date = get_date
+    end
+    return date
 end
 
 def get_recur_start_date
-    puts "Please enter the date you want the recurrence to start [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
-    puts "Leave blank to use today's date"
-    date = get_date
+    date = nil
+    while date.nil?
+        puts "Please enter the date you want the recurrence to start [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
+        puts "Leave blank to use today's date"
+        date = get_date
+    end
+    return date
 end
 
 def get_trans_amt
@@ -145,9 +154,13 @@ def get_freq
 end
 
 def get_recur_end_date
-    puts "Enter a date when the recurrence will end [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
-    puts "Leave blank to set maximum (5 years)"
-    date = get_date(1)
+    date = nil
+    while date.nil?
+        puts "Enter a date when the recurrence will end [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
+        puts "Leave blank to set maximum (5 years)"
+        date = get_date(1)
+    end
+    return date
 end
 
 def add_single_trans(username)
@@ -158,6 +171,7 @@ def add_single_trans(username)
     t_cat = get_trans_cat
     new_trans = Transaction.new(username, id, t_date, t_amt, t_desc, t_cat)
     new_trans.add
+    sort_csv(username)
 end
 
 def add_recurring_trans(username)
@@ -171,4 +185,5 @@ def add_recurring_trans(username)
     t_end = get_recur_end_date
     new_trans = Recurring.new(username, id, t_date, t_amt, t_desc, t_cat, 1, t_int, t_freq, t_end)
     new_trans.add
+    sort_csv(username)
 end
