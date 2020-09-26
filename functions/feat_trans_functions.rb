@@ -98,21 +98,79 @@ def get_trans_cat
 end
 
 def get_interval
+    ivls = ["1 - Week", "2 - Month", "3 - Year"]
+    interval = nil
     puts "What interval will the transactions occur over?"
-    interval = gets.chomp
-    return :month
+    while interval.nil?
+        ivls.each { |i| puts i }
+        puts "Enter the number for the recurrence intervals"
+        interval = gets.chomp
+        case interval[0].to_i
+        when 1
+            interval = :week
+        when 2
+            interval = :month
+        when 3
+            interval = :year
+        else
+            puts "That is not a valid selection - please only enter a number between 1 and 3"
+            interval = nil
+        end
+    end
+    return interval
 end
 
 def get_freq
-    puts "How frequently do you want this to recur? e,g, every month (enter 1), every 2 months (enter 2) etc?"
-    freq = gets.chomp.to_i
-    return freq
+    freq = nil
+    while freq.nil?
+        puts "How frequently do you want this to recur? e.g. every month/week/year (enter 1), every 2 weeks/months/years (enter 2) etc"
+        freq = gets.chomp
+        if freq == "0"
+            freq = ""
+        end
+        begin
+            freq.empty?
+        rescue
+            puts 'That is an invalid frequency - please enter a whole number greater than 0'
+            freq = nil
+        end
+        begin
+            Integer(freq)
+        rescue
+            puts 'That is an invalid frequency - please enter a whole number greater than 0'
+            freq = nil
+        end
+    end
+    return freq.to_i
 end
 
 def get_recur_end_date
     puts "Enter a date when the recurrence will end [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
     puts "Leave blank to set maximum (5 years)"
     date = get_date(1)
+end
+
+def add_single_trans(username)
+    id = get_id(username)
+    t_date = get_trans_date
+    t_amt = get_trans_amt
+    t_desc = get_trans_desc
+    t_cat = get_trans_cat
+    new_trans = Transaction.new(username, id, t_date, t_amt, t_desc, t_cat)
+    new_trans.add
+end
+
+def add_recurring_trans(username)
+    id = get_id(username)
+    t_date = get_recur_start_date
+    t_amt = get_trans_amt
+    t_desc = get_trans_desc
+    t_cat = get_trans_cat
+    t_int = get_interval
+    t_freq = get_freq
+    t_end = get_recur_end_date
+    new_trans = Recurring.new(username, id, t_date, t_amt, t_desc, t_cat, 1, t_int, t_freq, t_end)
+    new_trans.add
 end
 
 def search_trans_by_date(user)
