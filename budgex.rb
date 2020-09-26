@@ -3,6 +3,7 @@ require_relative("functions/search_transactions")
 require_relative("functions/get_balance")
 require_relative("functions/user_signup")
 require_relative("functions/user_login")
+require_relative("functions/delete_user")
 
 # Run login/signup
 # main menu
@@ -37,15 +38,18 @@ end
 
 puts "Hi #{username}!"
 puts "Select an option from the main menu:"
-puts "1 - Add single transaction"
-puts "2 - Setup recurring transaction"
-puts "3 - Search transaction by date"
-puts "4 - Search transactions by date range"
-puts "5 - Search transactions by category"
-puts "6 - Search transactions by date range and category"
-puts "7 - Get current balance"
-puts "8 - Get future balance"
-puts "9 - Check for sub-zero balance danger"
+puts "1  - Add single transaction"
+puts "2  - Setup recurring transaction"
+puts "3  - Search transaction by date"
+puts "4  - Search transactions by date range"
+puts "5  - Search transactions by category"
+puts "6  - Search transactions by date range and category"
+puts "7  - Get current balance"
+puts "8  - Get future balance"
+puts "9  - Check for sub-zero balance danger"
+puts "10 - Change password"
+puts "11 - Delete Account"
+puts "12 - Logout"
 
 opt = gets.chomp.to_i
 
@@ -68,6 +72,12 @@ when 8
     get_balance(username, 1)
 when 9
     sub_zero_balance_check(username)
+when 10
+    puts "nope"
+when 11
+    delete_user(username)
+when 12
+    puts "ok bye"
 else
     puts "You fucked up. I'm outta here!"
 end
