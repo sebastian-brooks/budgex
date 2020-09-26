@@ -11,3 +11,5 @@ gem "date", "~> 3.0"
 gem "csv", "~> 3.1"
 
 gem "recurrence", "~> 1.3"
+
+gem "rspec", "~> 3.9"

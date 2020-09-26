@@ -172,14 +172,3 @@ def add_recurring_trans(username)
     new_trans = Recurring.new(username, id, t_date, t_amt, t_desc, t_cat, 1, t_int, t_freq, t_end)
     new_trans.add
 end
-
-def search_trans_by_date(user)
-    puts "Please enter a transaction date [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
-    puts "Leave blank for today's date"
-    date = get_date
-    CSV.foreach("user_transactions/#{user}.csv", headers: true).select { |row|
-        if row["date"] == date
-            puts "#{row["id"]} | #{row["date"]} | #{row["amount"]} | #{row["description"]} | #{row["category"]}"
-        end
-    }
-end

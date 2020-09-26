@@ -1,4 +1,5 @@
-require_relative("functions/feat_trans_functions")
+require_relative("functions/add_transactions")
+require_relative("functions/search_transactions")
 
 # Run login/signup
 # main menu
@@ -18,18 +19,25 @@ require_relative("functions/feat_trans_functions")
 
 username = "test"
 
+puts "WELCOME TO BUDGEX - A BUDGET AND EXPENSE TRACKING TOOL"
 puts "Select an option"
 puts "1 - Add single transaction"
 puts "2 - Setup recurring transaction"
 puts "3 - Search transaction by date"
+puts "4 - Search transactions by date range"
+puts "5 - Search transactions by category"
+puts "6 - Search transactions by date range and category"
 opt = gets.chomp.to_i
 
-if opt == 1
+case opt
+when 1
     add_single_trans(username)
-elsif opt == 2
+when 2
     add_recurring_trans(username)
-elsif opt == 3
+when 3
     search_trans_by_date(username)
+when 4
+    search_trans_by_date_range(username)
 else
     puts "You fucked up. I'm outta here!"
 end
