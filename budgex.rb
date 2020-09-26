@@ -19,7 +19,7 @@ require_relative("functions/user_signup")
 #   delete account
 #   logout
 
-# username = "test"
+username = nil
 
 puts "WELCOME TO BUDGEX - A BUDGET AND EXPENSE TRACKING TOOL"
 puts "1 - Login"
@@ -31,9 +31,10 @@ case opt
 when 1
     user_login
 when 2
-    user_signup
+    username = user_signup
 end
 
+puts "Hi #{username}!"
 puts "Select an option from the main menu:"
 puts "1 - Add single transaction"
 puts "2 - Setup recurring transaction"

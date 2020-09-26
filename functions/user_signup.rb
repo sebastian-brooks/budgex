@@ -1,6 +1,6 @@
-# require 'rubygems'
 require "highline/import"
 require "json"
+require_relative("../classes/user")
 
 def create_username
     username = nil
@@ -47,12 +47,27 @@ def check_unique_user(uname)
     return usr
 end
 
-def create_user(un, pw)
-    user = {"username" => un, "password" => pw}
-    data = JSON.parse(File.read("users/users.json"))
-    data["users"] << user
-    File.write("users/users.json", JSON.generate(data))
-    puts "Thanks #{un}"
+def get_balance
+    amt = nil
+    while amt.nil?
+        puts "Please enter your current bank balance"
+        amt = gets.chomp
+        if amt[0] == "$"
+            amt = amt[1..-1]
+        end
+        begin
+            Integer(amt)
+        rescue
+            begin
+                Float(amt)
+            rescue
+                puts "That is an invalid amount"
+                amt = nil
+            end
+        end
+    end
+    amt = amt.to_f
+    return amt
 end
 
 def user_signup
@@ -62,5 +77,11 @@ def user_signup
         username = check_unique_user(username)
     end
     password = create_password
-    create_user(username, password)
+    user = User.new(username, password)
+    user.add
+    user.create_user_csv
+    bal = get_balance
+    user.opening_balance(bal)
+    puts "Thanks! Signup successful!"
+    return username
 end
