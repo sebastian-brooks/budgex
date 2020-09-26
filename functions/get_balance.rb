@@ -48,6 +48,27 @@ def sub_zero_balance_check(user)
     if scary_dates.size == 0
         puts "Great news! You should have enough funds for all your scheduled expenses! Keep up the great work!"
     else
-        puts "Oh no! You won't have enough money on #{scary_dates.sort[0]}!"
+        puts "Awr crabshit! You won't have enough money on #{scary_dates.sort[0]}!"
+    end
+end
+
+def balance_opts(uname)
+    run = true
+    while run
+        puts "1 - GET CURRENT BALANCE"
+        puts "2 - GET FUTURE BALANCE"
+        puts "3 - RETURN TO MAIN MENU"
+        opt = gets.chomp.to_i
+        if opt == 1
+            get_balance(uname)
+            run = false
+        elsif opt == 2
+            get_balance(uname, 1)
+            run = false
+        elsif opt == 3
+            run = false
+        else
+            puts "Please enter a number between 1 and 3"
+        end
     end
 end

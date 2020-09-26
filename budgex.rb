@@ -52,25 +52,15 @@ while run
     when 2
         trans_search_opts(username)
     when 3
-        (username)
+        balance_opts(username)
     when 4
-        (username)
-    when 5
-        (username)
-    when 6
-        (username)
-    when 7
-        get_balance(username)
-    when 8
-        get_balance(username, 1)
-    when 9
         sub_zero_balance_check(username)
-    when 10
+    when 5
         change_pw(username)
-    when 11
+    when 6
         delete_user(username)
         run = false
-    when 12
+    when 7
         puts "Salame!"
         run = false
     else
