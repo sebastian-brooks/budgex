@@ -4,6 +4,7 @@ require_relative("functions/get_balance")
 require_relative("functions/user_signup")
 require_relative("functions/user_login")
 require_relative("functions/delete_user")
+require_relative("functions/change_password")
 
 # Run login/signup
 # main menu
@@ -73,7 +74,7 @@ when 8
 when 9
     sub_zero_balance_check(username)
 when 10
-    puts "nope"
+    change_pw(username)
 when 11
     delete_user(username)
 when 12
