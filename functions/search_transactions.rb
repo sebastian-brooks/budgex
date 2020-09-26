@@ -16,6 +16,7 @@ def search_trans_by_date(user)
         end
     }
     get_balance(user, 0, date)
+    check_user_edit_pref(user)
 end
 
 def search_trans_by_date_range(user)
@@ -37,6 +38,7 @@ def search_trans_by_date_range(user)
         end
     }
     get_balance(user, 0, end_date)
+    check_user_edit_pref(user)
 end
 
 def search_trans_by_cat(user)
@@ -46,6 +48,7 @@ def search_trans_by_cat(user)
             puts "#{row["id"]} | #{row["date"]} | #{row["amount"]} | #{row["description"]} | #{row["category"]}"
         end
     }
+    check_user_edit_pref(user)
 end
 
 def search_trans_by_cat_date_range(user)
@@ -68,4 +71,43 @@ def search_trans_by_cat_date_range(user)
         end
     }
     get_balance(user, 0, end_date)
+    check_user_edit_pref(user)
+end
+
+def check_user_edit_pref(uname)
+    puts "1 - Edit/delete transaction"
+    puts "2 - Return to main menu"
+    opt = gets.chomp.to_i
+    if opt == 1
+        edit_trans_guide(uname)
+    end
+end
+
+def trans_search_opts(uname)
+    run = true
+    while run
+        puts "1 - SEARCH TRANSACTIONS BY DATE"
+        puts "2 - SEARCH TRANSACTIONS BY DATE RANGE"
+        puts "3 - SEARCH TRANSACTIONS BY CATEGORY"
+        puts "4 - SEARCH TRANSACTIONS BY DATE RANGE & CATEGORY"
+        puts "5 - RETURN TO MAIN MENU"
+        opt = gets.chomp.to_i
+        if opt == 1
+            search_trans_by_date(uname)
+            run = false
+        elsif opt == 2
+            search_trans_by_date_range(uname)
+            run = false
+        elsif opt == 3
+            search_trans_by_cat(uname)
+            run = false
+        elsif opt == 4
+            search_trans_by_cat_date_range(uname)
+            run = false
+        elsif opt == 5
+            run = false
+        else
+            puts "Please enter a number between 1 and 5"
+        end
+    end
 end

@@ -187,3 +187,24 @@ def add_recurring_trans(username)
     new_trans.add
     sort_csv(username)
 end
+
+def trans_add_opts(uname)
+    run = true
+    while run
+        puts "1 - ADD SINGLE TRANSACTION"
+        puts "2 - SETUP RECURRING TRANSACTIONS"
+        puts "3 - RETURN TO MAIN MENU"
+        opt = gets.chomp.to_i
+        if opt == 1
+            add_single_trans(uname)
+            run = false
+        elsif opt == 2
+            add_recurring_trans(uname)
+            run = false
+        elsif opt == 3
+            run = false
+        else
+            puts "Please enter a number between 1 and 3"
+        end
+    end
+end
