@@ -1,6 +1,7 @@
 require "csv"
 require_relative("add_transactions")
 require_relative("get_balance")
+require_relative("edit_transaction")
 
 def search_trans_by_date(user)
     date = nil

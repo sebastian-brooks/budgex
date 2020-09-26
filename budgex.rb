@@ -5,6 +5,7 @@ require_relative("functions/user_signup")
 require_relative("functions/user_login")
 require_relative("functions/delete_user")
 require_relative("functions/change_password")
+require_relative("functions/edit_transaction")
 
 # Run login/signup
 # main menu
@@ -20,6 +21,7 @@ require_relative("functions/change_password")
 #       go to date
 #           edit
 #   delete account
+#   change pw
 #   logout
 
 username = nil
@@ -51,6 +53,7 @@ puts "9  - Check for sub-zero balance danger"
 puts "10 - Change password"
 puts "11 - Delete Account"
 puts "12 - Logout"
+puts "13 - Edit/Delete transaction"
 
 opt = gets.chomp.to_i
 
@@ -79,6 +82,8 @@ when 11
     delete_user(username)
 when 12
     puts "ok bye"
+when 13
+    edit_trans_guide(username)
 else
     puts "You fucked up. I'm outta here!"
 end
