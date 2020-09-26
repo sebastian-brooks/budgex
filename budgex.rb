@@ -2,6 +2,7 @@ require_relative("functions/add_transactions")
 require_relative("functions/search_transactions")
 require_relative("functions/get_balance")
 require_relative("functions/user_signup")
+require_relative("functions/user_login")
 
 # Run login/signup
 # main menu
@@ -29,7 +30,7 @@ opt = gets.chomp.to_i
 
 case opt
 when 1
-    user_login
+    username = user_login
 when 2
     username = user_signup
 end
