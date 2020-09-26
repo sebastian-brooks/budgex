@@ -37,7 +37,7 @@ def sub_zero_balance_check(user)
     sub_z = nil
     scary_dates = []
     CSV.foreach("user_transactions/#{user}.csv", headers: true).select { |row|
-        if row["date"] > date
+        if row["date"] >= date
             curr_bal += row["amount"].to_f
             if curr_bal < 0
                 sub_z = row["date"]

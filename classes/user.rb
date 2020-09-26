@@ -21,7 +21,7 @@ class User
 
     def opening_balance(bal)
         bal_date = [Date.today.to_s, bal]
-        CSV.open("user_transactions/#{@username}_transactions.csv", "w") do |row|
+        CSV.open("user_transactions/#{@username}_balance.csv", "w") do |row|
             row << ["date", "balance"]
             row << bal_date
         end

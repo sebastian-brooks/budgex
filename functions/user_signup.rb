@@ -47,7 +47,7 @@ def check_unique_user(uname)
     return usr
 end
 
-def get_balance
+def get_bal
     amt = nil
     while amt.nil?
         puts "Please enter your current bank balance"
@@ -80,7 +80,7 @@ def user_signup
     user = User.new(username, password)
     user.add
     user.create_user_csv
-    bal = get_balance
+    bal = get_bal
     user.opening_balance(bal)
     puts "Thanks! Signup successful!"
     return username
