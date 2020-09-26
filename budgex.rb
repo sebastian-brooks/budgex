@@ -27,6 +27,7 @@ puts "3 - Search transaction by date"
 puts "4 - Search transactions by date range"
 puts "5 - Search transactions by category"
 puts "6 - Search transactions by date range and category"
+
 opt = gets.chomp.to_i
 
 case opt
@@ -38,6 +39,10 @@ when 3
     search_trans_by_date(username)
 when 4
     search_trans_by_date_range(username)
+when 5
+    search_trans_by_cat(username)
+when 6
+    search_trans_by_cat_date_range(username)
 else
     puts "You fucked up. I'm outta here!"
 end
