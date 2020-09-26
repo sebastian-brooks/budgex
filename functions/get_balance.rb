@@ -10,15 +10,14 @@ def retrieve_stored_balance(user)
     return bal
 end
 
-def get_balance(user, fut=0)
-    date = nil
-    if fut == 1
+def get_balance(user, fut=0, date=nil)
+    if fut == 1 && date.nil?
         while date.nil?
             puts "Please enter the future date you'd like to get your balance for [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
             puts "Leave blank for today's date"
             date = get_date
         end
-    else
+    elsif fut == 0 && date.nil?
         date = Date.today.to_s
     end
     bal_date = retrieve_stored_balance(user)[:date]
@@ -28,11 +27,7 @@ def get_balance(user, fut=0)
             bal_amt += row["amount"].to_f
         end
     }
-    if fut == 1
-        puts "Your predicted balance is: #{bal_amt.to_d}"
-    else
-        puts "Your current balance is: #{bal_amt.to_d}"
-    end
+    puts "Balance at #{date}: #{bal_amt.to_d}"
     return bal_amt
 end
 

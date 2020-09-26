@@ -1,5 +1,6 @@
 require "csv"
 require_relative("add_transactions")
+require_relative("get_balance")
 
 def search_trans_by_date(user)
     date = nil
@@ -13,6 +14,7 @@ def search_trans_by_date(user)
             puts "#{row["id"]} | #{row["date"]} | #{row["amount"]} | #{row["description"]} | #{row["category"]}"
         end
     }
+    get_balance(user, 0, date)
 end
 
 def search_trans_by_date_range(user)
@@ -33,6 +35,7 @@ def search_trans_by_date_range(user)
             puts "#{row["id"]} | #{row["date"]} | #{row["amount"]} | #{row["description"]} | #{row["category"]}"
         end
     }
+    get_balance(user, 0, end_date)
 end
 
 def search_trans_by_cat(user)
@@ -63,4 +66,5 @@ def search_trans_by_cat_date_range(user)
             puts "#{row["id"]} | #{row["date"]} | #{row["amount"]} | #{row["description"]} | #{row["category"]}"
         end
     }
+    get_balance(user, 0, end_date)
 end
