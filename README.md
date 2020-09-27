@@ -14,4 +14,4 @@ After creating a local repo by cloning, navigate to the base folder of the local
 
 Type `bundle install`
 
-Wait for dependencies to install, then type `ruby budgex.rb` to run the application
+Wait for dependencies to install, then type `ruby main.rb` to run the application
