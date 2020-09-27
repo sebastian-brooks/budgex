@@ -1,5 +1,5 @@
-require "highline/import"
+require("tty-prompt")
 
 def get_password
-    ask("") { |q| q.echo = "*" }
+    TTY::Prompt.new.mask("")
 end
