@@ -1,6 +1,6 @@
 require_relative("functions/user_signup")
 require_relative("functions/user_login")
-require_relative("functions/add_transactions")
+require_relative("functions/add_transaction")
 require_relative("functions/search_transactions")
 require_relative("functions/edit_transaction")
 require_relative("functions/get_balance")
@@ -43,11 +43,11 @@ while true
     opt = gets.chomp.to_i
     case opt
     when 1
-        trans_add_opts(user)
+        add_transaction_process(user)
     when 2
-        trans_search_opts(user)
+        transaction_search_process(user)
     when 3
-        balance_opts(user)
+        check_balance_process(user)
     when 4
         sub_zero_balance_check(user)
     when 5

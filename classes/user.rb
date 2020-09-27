@@ -18,7 +18,7 @@ class User
     end
 
     def create_transactions_csv
-        CSV.open("user_transactions/#{@username}.csv", "w") do |row|
+        CSV.open("user_transactions/#{@username}_transactions.csv", "w") do |row|
             row << ["id", "date", "amount", "description", "category", "recur"]
         end
     end
@@ -61,8 +61,26 @@ class User
         puts "Password successfully updated"
     end
 
+    def sort_transactions
+        transactions = CSV.read("user_transactions/#{@username}_transactions.csv", headers: true)
+        transactions = transactions.sort { |a, b| a[1] <=> b[1] }
+        CSV.open("user_transactions/#{@username}_transactions.csv", "w") do |row|
+            row << ["id", "date", "amount", "description", "category", "recur"]
+            transactions.each { |transaction| row << transaction }
+        end
+    end
+
+    def generate_new_transaction_id
+        id = []
+        CSV.foreach("user_transactions/#{@username}_transactions.csv", headers: true) { |row| id << row["id"].to_i }
+        if id.size == 0
+            id << 0
+        end
+        return id.max + 1
+    end
+
     def delete_user_files
-        File.delete("user_transactions/#{@username}.csv")
+        File.delete("user_transactions/#{@username}_transactions.csv")
         File.delete("user_transactions/#{@username}_balance.csv")
     end
     

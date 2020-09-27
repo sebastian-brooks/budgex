@@ -1,4 +1,4 @@
-require_relative("add_transactions")
+require_relative("add_transaction")
 
 def get_trans_by_id(un)
     result = nil
@@ -6,7 +6,7 @@ def get_trans_by_id(un)
     date = nil
     while result.nil?
         id = gets.chomp
-        data = CSV.read("user_transactions/#{un}.csv", headers: true)
+        data = CSV.read("user_transactions/#{un}_transactions.csv", headers: true)
         data.each { |row|
             if row["id"].to_s == id
                 result = 1
@@ -23,24 +23,24 @@ def get_trans_by_id(un)
 end
 
 def delete_trans_by_id(un, trans_id)
-    csv = CSV.read("user_transactions/#{un}.csv", headers: true)
+    csv = CSV.read("user_transactions/#{un}_transactions.csv", headers: true)
     csv.delete_if { |row| row["id"].to_s == trans_id }
-    CSV.open("user_transactions/#{un}.csv", "w", headers: true) do |row|
+    CSV.open("user_transactions/#{un}_transactions.csv", "w", headers: true) do |row|
         row << ["id", "date", "amount", "description", "category", "recur"]
         csv.each { |trans| row << trans }
     end
 end
 
 def delete_trans_by_date_id(un, date, trans_id)
-    csv = CSV.read("user_transactions/#{un}.csv", headers: true)
+    csv = CSV.read("user_transactions/#{un}_transactions.csv", headers: true)
     csv.delete_if { |row| row["id"].to_s == trans_id && row["date"] == date }
-    CSV.open("user_transactions/#{un}.csv", "w", headers: true) do |row|
+    CSV.open("user_transactions/#{un}_transactions.csv", "w", headers: true) do |row|
         row << ["id", "date", "amount", "description", "category", "recur"]
         csv.each { |trans| row << trans }
     end
 end
 
-def edit_trans_guide(uname)
+def edit_transaction_process(user)
     run = true
     while run
         puts "What would you like to do?"

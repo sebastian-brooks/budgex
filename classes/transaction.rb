@@ -1,21 +1,20 @@
-require "csv"
+require("csv")
 
 class Transaction
-    attr_reader :user, :id, :date, :amount, :description, :category
-    def initialize(user, id, date, amount, description, category, recur=0)
-        @user = user
+    def initialize(username, id, date, amount, description, category, recur=0)
+        @username = username
         @id = id
         @date = date
         @amount = amount
         @description = description
         @category = category
         @recur = recur
-        @trans = {id: @id, date: @date, amount: @amount, description: @description, category: @category, recur: @recur}
+        @transaction = {id: @id, date: @date, amount: @amount, description: @description, category: @category, recur: @recur}
     end
 
     def add
-        CSV.open("user_transactions/#{@user}.csv", "a") do |row|
-            row << @trans.values.to_a
+        CSV.open("user_transactions/#{@username}_transactions.csv", "a") do |row|
+            row << @transaction.values.to_a
         end
         puts "Transaction added"
     end
