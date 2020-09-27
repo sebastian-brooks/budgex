@@ -1,63 +1,38 @@
-require "highline/import"
+require_relative("../classes/user")
+require_relative("get_password")
+require_relative("check_user_in_users_list")
 
 def get_username
     username = nil
     while username.nil?
-        puts "Please enter your username:"
-        username = gets.chomp.downcase.gsub(" ", "")
-        if username.count("a-z") == username.length && username != "" && username.length >= 3
-            puts "Thanks #{username}"
-        else
-            puts "That is an invalid username"
-            username = nil
-        end
+        puts "Username:"
+        username = gets.chomp
+        username = nil if username.empty?
     end
     return username
 end
 
-def get_pw(prompt="Please enter your password:")
-    ask(prompt) {|q| q.echo = "*"}
-end
-
-def get_password
-    pw = nil
-    while pw.nil?
-        pw = get_pw()
-        if ! pw.length.between?(8,16) || pw.match(" ") || pw.empty?
-            puts "That's an invalid password - we wouldn't let you sign up with a password like that"
-            pw = nil
-        end
+def capture_password
+    password = nil
+    while password.nil?
+        password = get_password()
+        password = nil if password.empty?
     end
-    return pw
+    return password
 end
 
-def check_login_details(uname, pw)
-    result = nil
-    users = JSON.parse(File.read("users/users.json"))
-    users["users"].each { |i|
-        if i["username"] == uname && i["password"] == pw
-            result = 1
-        elsif i["username"] == uname && i["password"] != pw
-            result = 0
-        end
-    }
-    if result.nil?
-        puts "Sorry, those details couldn't be found"
-    elsif result == 0
-        puts "Username and password don't match"
-    end
-    return result
-end
-
-def user_login
-    run = true
-    while run
-        un = get_username
-        pw = get_password
-        result = check_login_details(un, pw)
+def user_login_process
+    login_attempts = 0
+    user = nil
+    while login_attempts <= 3 && user == nil
+        login_attempts += 1
+        username = get_username()
+        password = capture_password()
+        result = check_login_details(username, password)
         if result == 1
-            run = false
+            user = User.new(username, password)
         end
     end
-    return un
+    puts "Too many login attempts - go away Julian Assange" if login_attempts > 3
+    return user
 end

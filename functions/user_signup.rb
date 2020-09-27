@@ -1,87 +1,66 @@
-require "highline/import"
-require "json"
 require_relative("../classes/user")
+require_relative("get_password")
+require_relative("check_user_in_users_list")
+require_relative("get_amount")
 
+# Create username from user input
 def create_username
     username = nil
     while username.nil?
-        puts "Please enter a username consisting only of at least 3 alphabetic characters (e.g. jbloggs - no symbols, numers or spaces)"
-        username = gets.chomp.downcase.gsub(" ", "")
-        if username.count("a-z") == username.length && username != "" && username.length >= 3
-            puts "Thanks #{username}"
-        else
-            puts "That is an invalid username"
+        puts "Enter a username consisting of 3 to 10 alphanumeric characters (no symbols or spaces)"
+        username = gets.chomp
+        if username.count("a-zA-Z0-9") != username.length || username.empty? || username.match(" ") || ! username.length.between?(3,10)
+            puts "Nope, that's an invalid username"
             username = nil
         end
     end
     return username
 end
 
-def get_password(prompt="Please enter a password consisting of at 8-16 characters with no spaces:")
-    ask(prompt) {|q| q.echo = "*"}
+# Check if username already exists in users.json
+def check_unique_user(username)
+    user_check = check_username_in_users(username)
+    if user_check == 1
+        puts "Dang, that username is already taken - try again"
+        username = nil
+    end
+    return username
 end
 
+# Create password from user input
 def create_password
-    pw = nil
-    while pw.nil?
-        pw = get_password()
-        if ! pw.length.between?(8,16) || pw.match(" ") || pw.empty?
-            puts "Password doesn't meet criteria"
-            pw = nil
+    password = nil
+    while password.nil?
+        puts "Please create a password consisting of 8 to 16 characters with no spaces"
+        password = get_password()
+        if ! password.length.between?(8,16) || password.match(" ") || password.empty?
+            puts "Nope, that password doesn't meet the criteria"
+            password = nil
         end
     end
-    return pw
+    return password
 end
 
-def check_unique_user(uname)
-    usr = uname
-    un = JSON.parse(File.read("users/users.json"))
-    un["users"].each { |i|
-        if i["username"] == uname
-            usr = nil
-        end
-    }
-    if usr.nil?
-        puts "Sorry, that username is already taken"
-    end
-    return usr
+# Get starting balance from user input
+def get_user_bal
+    puts "Please enter your current bank balance"
+    amount = get_amount()
+    return amount
 end
 
-def get_bal
-    amt = nil
-    while amt.nil?
-        puts "Please enter your current bank balance"
-        amt = gets.chomp
-        if amt[0] == "$"
-            amt = amt[1..-1]
-        end
-        begin
-            Integer(amt)
-        rescue
-            begin
-                Float(amt)
-            rescue
-                puts "That is an invalid amount"
-                amt = nil
-            end
-        end
-    end
-    amt = amt.to_f
-    return amt
-end
-
-def user_signup
+# Main - capture required details & instantiate a User class
+def user_signup_process
     username = nil
     while username.nil?
-        username = create_username
+        username = create_username()
         username = check_unique_user(username)
     end
-    password = create_password
-    user = User.new(username, password)
-    user.add
-    user.create_user_csv
-    bal = get_bal
-    user.opening_balance(bal)
-    puts "Thanks! Signup successful!"
-    return username
+    password = create_password()
+    new_user = User.new(username, password)
+    new_user.add
+    new_user.create_transactions_csv
+    user_balance = get_user_bal()
+    new_user.create_balance_csv(user_balance)
+    puts "Signup successful!"
+    return new_user
 end
