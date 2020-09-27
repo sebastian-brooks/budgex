@@ -17,3 +17,5 @@ gem "rspec", "~> 3.9"
 gem "highline", "~> 2.0"
 
 gem "tty-prompt", "~> 0.22.0"
+
+gem "rainbow", "~> 3.0"

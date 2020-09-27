@@ -1,3 +1,4 @@
+require("rainbow/refinement")
 require("tty-prompt")
 require_relative("functions/user_signup")
 require_relative("functions/user_login")
@@ -8,16 +9,21 @@ require_relative("functions/get_balance")
 require_relative("functions/change_password")
 require_relative("functions/delete_user")
 
-prompt = TTY::Prompt.new
+using Rainbow
 
-puts "BUDGEX"
-puts "budget & expense tracking made e z"
+puts ". . . .    .       .   . . . .      . . . .     . . . . .   .           .".black.bg(:white)
+puts ".      .   .       .   .       .   .            .             .       .  ".black.bg(:white)
+puts ".      .   .       .   .       .   .            .               .   .    ".black.bg(:white)
+puts ". . . .    .       .   .       .   .    .  .    . . . .           .      ".black.bg(:white)
+puts ".      .   .       .   .       .   .    .   .   .               .   .    ".black.bg(:white)
+puts ".       .  .       .   .       .   .        .   .             .       .  ".black.bg(:white)
+puts ". . . . .   . . . .    . . . .      . . . .     . . . . .   .           .".black.bg(:white)
 
 # Login/signup process
 user = nil
 while user.nil?
     choices = ["SIGNUP", "LOGIN", "EXIT"]
-    opt = prompt.select("", choices)
+    opt = TTY::Prompt.new.select("", choices)
     case opt
     when choices[0]
         user = user_signup_process()
@@ -42,7 +48,7 @@ while true
         "DELETE ACCOUNT",
         "LOGOUT"
     ]
-    opt = prompt.select("Hi #{user.username.upcase}! What would you like to do?", choices)
+    opt = TTY::Prompt.new.select("Hi #{user.username.upcase}! What would you like to do?", choices)
     case opt
     when choices[0]
         add_transaction_process(user)
