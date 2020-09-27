@@ -1,3 +1,4 @@
+require("tty-prompt")
 require_relative("../classes/recurring")
 require_relative("../classes/transaction")
 require_relative("../classes/user")
@@ -5,21 +6,11 @@ require_relative("get_amount")
 require_relative("get_date")
 
 def get_transaction_amount
-    amount = nil
-    opt = nil
-    while opt.nil?
-        puts "Is this income or an expense?"
-        puts "1 - EXPENSE"
-        puts "2 - INCOME"
-        opt = gets.chomp.to_i
-        if opt != 1 && opt != 2
-            opt = nil
-            puts "Please only enter 1 or 2 as your selection"
-        end
-    end
-    puts "Please enter the amount of the transaction [FORMAT: number or decimal (e.g. $9.25 = 9.25)]"
+    choices = ["EXPENSE", "INCOME"]
+    opt = TTY::Prompt.new.select("Is this income or an expense?", choices)
+    puts "Please enter the amount of the transaction [FORMAT: whole number or decimal (e.g. 9.25)]"
     amount = get_amount()
-    if opt == 1
+    if opt == choices[0]
         amount = -amount
     end
     return amount
@@ -40,59 +31,24 @@ end
 
 def get_transaction_category
     category_list = [
-        "1 - FOOD/DRINK",
-        "2 - TRAVEL",
-        "3 - RENT/MORTGAGE",
-        "4 - INCOME",
-        "5 - UTILITIES",
-        "6 - HOUSEHOLD",
-        "7 - ENTERTAINMENT",
-        "8 - PERSONAL",
-        "9 - OTHER"
+        "FOOD/DRINK",
+        "TRAVEL",
+        "RENT/MORTGAGE",
+        "INCOME",
+        "UTILITIES",
+        "HOUSEHOLD",
+        "ENTERTAINMENT",
+        "PERSONAL",
+        "OTHER"
     ]
-    category = nil
-    opt = nil
-    while opt.nil?
-        puts "Please enter a number for the category that best describes the transaction from the list below:"
-        category_list.each { |cat| puts cat }
-        opt = gets.chomp.to_i
-        if ! opt.between?(1,9)
-            puts "Invalid selection"
-            opt = nil
-        end
-    end
-    category_list.each { |cat|
-        if cat[0].to_i == opt
-            category = cat[4..-1]
-        end
-    }
+    category = TTY::Prompt.new.select("Select a category that best describes the transaction", category_list)
     return category
 end
 
 def get_recurrence_interval
-    ivls = [
-        "1 - Week",
-        "2 - Month",
-        "3 - Year"
-    ]
-    interval = nil
-    puts "What interval will the transactions occur over?"
-    while interval.nil?
-        ivls.each { |i| puts i }
-        puts "Enter the number for the recurrence intervals"
-        interval = gets.chomp
-        case interval[0].to_i
-        when 1
-            interval = :week
-        when 2
-            interval = :month
-        when 3
-            interval = :year
-        else
-            puts "That is not a valid selection - please only enter a number between 1 and 3"
-            interval = nil
-        end
-    end
+    interval_list = ["WEEK", "MONTH", "YEAR"]
+    interval = TTY::Prompt.new.select("What interval will the transactions recur over?", interval_list)
+    interval = interval.downcase.to_sym
     return interval
 end
 
@@ -163,21 +119,21 @@ end
 def add_transaction_process(user)
     run = true
     while run
-        puts "1 - ADD SINGLE TRANSACTION"
-        puts "2 - SETUP RECURRING TRANSACTIONS"
-        puts "3 - RETURN TO MAIN MENU"
-        opt = gets.chomp.to_i
+        choices = [
+        "ADD SINGLE TRANSACTION",
+        "SETUP RECURRING TRANSACTIONS",
+        "RETURN TO MAIN MENU"
+        ]
+        opt = TTY::Prompt.new.select("", choices)
         case opt
-        when 1
+        when choices[0]
             add_single_transaction_process(user)
             run = false
-        when 2
+        when choices[1]
             add_recurring_transaction_process(user)
             run = false
-        when 3
+        when choices[2]
             run = false
-        else
-            puts "Please enter a number between 1 and 3"
         end
     end
 end

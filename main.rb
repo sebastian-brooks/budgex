@@ -1,3 +1,4 @@
+require("tty-prompt")
 require_relative("functions/user_signup")
 require_relative("functions/user_login")
 require_relative("functions/add_transaction")
@@ -7,21 +8,22 @@ require_relative("functions/get_balance")
 require_relative("functions/change_password")
 require_relative("functions/delete_user")
 
-puts "WELCOME TO BUDGEX - A BUDGET AND EXPENSE TRACKING TOOL"
+prompt = TTY::Prompt.new
+
+puts "BUDGEX"
+puts "budget & expense tracking made e z"
 
 # Login/signup process
 user = nil
 while user.nil?
-    puts "\n1 - SIGNUP"
-    puts "2 - LOGIN"
-    puts "3 - EXIT"
-    opt = gets.chomp.to_i
+    choices = ["SIGNUP", "LOGIN", "EXIT"]
+    opt = prompt.select("", choices)
     case opt
-    when 1
+    when choices[0]
         user = user_signup_process()
-    when 2
+    when choices[1]
         user = user_login_process()
-    when 3
+    when choices[2]
         puts "But I hardly knew you..."
         exit
     else
@@ -31,35 +33,33 @@ end
 
 # Main program navigation
 while true
-    puts "Hi #{user.username}! What would you like to do?"
-    puts "1 - ADD TRANSACTION"
-    puts "2 - SEARCH TRANSACTIONS"
-    puts "3 - CHECK BALANCE"
-    puts "4 - DEBT CHECK"
-    puts "5 - CHANGE PASSWORD"
-    puts "6 - DELETE ACCOUNT"
-    puts "7 - LOGOUT"
-
-    opt = gets.chomp.to_i
+    choices = [
+        "ADD TRANSACTION",
+        "SEARCH TRANSACTIONS",
+        "CHECK BALANCE",
+        "DEBT CHECK",
+        "CHANGE PASSWORD",
+        "DELETE ACCOUNT",
+        "LOGOUT"
+    ]
+    opt = prompt.select("Hi #{user.username.upcase}! What would you like to do?", choices)
     case opt
-    when 1
+    when choices[0]
         add_transaction_process(user)
-    when 2
+    when choices[1]
         transaction_search_process(user)
-    when 3
+    when choices[2]
         check_balance_process(user)
-    when 4
+    when choices[3]
         sub_zero_balance_check(user)
-    when 5
+    when choices[4]
         change_password_process(user)
-    when 6
+    when choices[5]
         delete_user_process(user)
         puts "Don't forget to blink lest your eyeballs dry up, fall out of their sockets and dangle on your cheek like Caeser's shrivelled coglio"
         exit
-    when 7
-        puts "Thanks for stopping by, watch your back."
+    when choices[6]
+        puts "Thanks for stopping by. Watch your back."
         exit
-    else
-        puts "That wasn't on the list of options, was it? Stick to the list."
     end
 end

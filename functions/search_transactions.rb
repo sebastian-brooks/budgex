@@ -1,4 +1,5 @@
 require("csv")
+require("tty-prompt")
 require_relative("add_transaction")
 require_relative("edit_transaction")
 require_relative("get_balance")
@@ -75,38 +76,37 @@ def search_transactions_by_category_date_range(user)
 end
 
 def check_user_edit_preference(user)
-    puts "1 - EDIT/DELETE TRANSACTION"
-    puts "2 - RETURN TO MAIN MENU"
-    opt = gets.chomp.to_i
-    edit_transaction_process(user) if opt == 1
+    choices = ["EDIT/DELETE TRANSACTION", "RETURN TO MAIN MENU"]
+    opt = TTY::Prompt.new.select("", choices)
+    edit_transaction_process(user) if opt == choices[0]
 end
 
 def transaction_search_process(user)
     run = true
     while run
-        puts "1 - SEARCH TRANSACTIONS BY DATE"
-        puts "2 - SEARCH TRANSACTIONS BY DATE RANGE"
-        puts "3 - SEARCH TRANSACTIONS BY CATEGORY"
-        puts "4 - SEARCH TRANSACTIONS BY DATE RANGE & CATEGORY"
-        puts "5 - RETURN TO MAIN MENU"
-        opt = gets.chomp.to_i
+        choices = [
+            "SEARCH TRANSACTIONS BY DATE",
+            "SEARCH TRANSACTIONS BY DATE RANGE",
+            "SEARCH TRANSACTIONS BY CATEGORY",
+            "SEARCH TRANSACTIONS BY DATE RANGE & CATEGORY",
+            "RETURN TO MAIN MENU"
+        ]
+        opt = TTY::Prompt.new.select("", choices)
         case opt
-        when 1
+        when choices[0]
             search_transactions_by_date(user)
             run = false
-        when 2
+        when choices[1]
             search_transactions_by_date_range(user)
             run = false
-        when 3
+        when choices[2]
             search_transactions_by_category(user)
             run = false
-        when 4
+        when choices[3]
             search_transactions_by_category_date_range(user)
             run = false
-        when 5
+        when choices[4]
             run = false
-        else
-            puts "Please enter a number between 1 and 5"
         end
     end
 end

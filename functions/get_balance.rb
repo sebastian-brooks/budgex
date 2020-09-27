@@ -1,4 +1,5 @@
 require("csv")
+require("tty-prompt")
 require_relative("get_date")
 
 def retrieve_stored_balance(user)
@@ -55,21 +56,17 @@ end
 def check_balance_process(user)
     run = true
     while run
-        puts "1 - GET CURRENT BALANCE"
-        puts "2 - GET FUTURE DATE BALANCE"
-        puts "3 - RETURN TO MAIN MENU"
-        opt = gets.chomp.to_i
+        choices = ["GET CURRENT BALANCE", "GET FUTURE DATE BALANCE", "RETURN TO MAIN MENU"]
+        opt = TTY::Prompt.new.select("", choices)
         case opt
-        when 1
+        when choices[0]
             get_balance(user)
             run = false
-        when 2
+        when choices[1]
             get_balance(user, 1)
             run = false
-        when 3
+        when choices[2]
             run = false
-        else
-            puts "Please enter a number between 1 and 3"
         end
     end
 end

@@ -1,4 +1,5 @@
 require("json")
+require("tty-prompt")
 require_relative("../classes/user")
 require_relative("get_password")
 
@@ -17,11 +18,11 @@ def delete_user_process(user)
     puts "Too many attempts - get out of here Edward Snowden" if attempts > 3
     if ! result.nil?
         puts "Here we go. One last chance to stop us from deleting your entire history..."
-        puts "Still want to delete your account? YES or NO?"
-        opt = gets.chomp
-        if opt.downcase == "yes" || opt.downcase == "y"
-            user.delete_user_files()
-            user.delete_user_login()
+        choices = ["YES", "NO"]
+        opt = TTY::Prompt.new.select("Still want to delete your account?", choices)
+        if opt == choices[0]
+            user.delete_user_files
+            user.delete_user_login
             puts "You're the worst. You don't appreciate anything. Good riddance."
         else
             puts "I knew you'd come to your senses. I'll keep my eyes on you from now on though..."
