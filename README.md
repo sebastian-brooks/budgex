@@ -4,7 +4,7 @@ Terminal app for Coder Academy T1A3 assignment
 
 ## Overview
 
-Provides a (relatively) simple way to track income and expenses, see where your balance will be at by the end of the week, the end of the month and/or the end of the year. It can help work towards a savings goal or to avoid falling further into debt - at the very least, see where they spend their money.
+Track incoming and outgoing money by inputting all your expenses in a (relatively) simple way. See where your balance will be at by the end of the week, the end of the month and/or the end of the year. Work towards a savings goal or avoid falling further into debt - at the very least, see where you spend your money.
 
 ## To run
 
