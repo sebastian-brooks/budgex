@@ -15,6 +15,7 @@ end
 def capture_password
     password = nil
     while password.nil?
+        puts "Password:"
         password = get_password()
         password = nil if password.empty?
     end

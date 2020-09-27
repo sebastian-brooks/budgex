@@ -31,7 +31,7 @@ end
 def create_password
     password = nil
     while password.nil?
-        puts "Please create a password consisting of 8 to 16 characters with no spaces"
+        puts "Please create a password consisting of 8 to 16 characters with no spaces:"
         password = get_password()
         if ! password.length.between?(8,16) || password.match(" ") || password.empty?
             puts "Nope, that password doesn't meet the criteria"

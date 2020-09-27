@@ -23,16 +23,14 @@ while user.nil?
         user = user_login_process()
     when 3
         puts "But I hardly knew you..."
-        user = 1
-        run = false
+        exit
     else
         puts "Please only enter 1, 2 or 3"
     end
 end
 
-# Main program
-logged_in = true
-while logged_in
+# Main program navigation
+while true
     puts "Hi #{user.username}! What would you like to do?"
     puts "1 - ADD TRANSACTION"
     puts "2 - SEARCH TRANSACTIONS"
@@ -43,25 +41,25 @@ while logged_in
     puts "7 - LOGOUT"
 
     opt = gets.chomp.to_i
-
     case opt
     when 1
-        trans_add_opts(username)
+        trans_add_opts(user)
     when 2
-        trans_search_opts(username)
+        trans_search_opts(user)
     when 3
-        balance_opts(username)
+        balance_opts(user)
     when 4
-        sub_zero_balance_check(username)
+        sub_zero_balance_check(user)
     when 5
-        change_pw(username)
+        change_password_process(user)
     when 6
-        delete_user(username)
-        logged_in = false
+        delete_user_process(user)
+        puts "Don't forget to blink lest your eyeballs dry up, fall out of their sockets and dangle on your cheek like Caeser's shrivelled coglio"
+        exit
     when 7
-        puts "Salame!"
-        logged_in = false
+        puts "Thanks for stopping by, watch your back."
+        exit
     else
-        puts "They mostly come out at night. Mostly."
+        puts "That wasn't on the list of options, was it? Stick to the list."
     end
 end
