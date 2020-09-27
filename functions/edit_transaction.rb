@@ -1,42 +1,35 @@
 require_relative("add_transaction")
 
-def get_trans_by_id(un)
-    result = nil
-    recur = nil
-    date = nil
-    while result.nil?
+def get_transaction_by_id(user)
+    transaction = nil
+    while transaction.nil?
         id = gets.chomp
-        data = CSV.read("user_transactions/#{un}_transactions.csv", headers: true)
+        data = CSV.read("user_transactions/#{user.username}_transactions.csv", headers: true)
         data.each { |row|
             if row["id"].to_s == id
-                result = 1
-                recur = row["recur"].to_i
-                date = row["date"]
+                transaction = Transaction.new(user.username, id.to_i, row["date"], row["amount"].to_f, row["description"], row["category"], row["recur"].to_i)
             end
         }
-        if result.nil?
-            puts "That is not a valid ID"
-        end
+        puts "That is not a valid ID" if transaction.nil?
     end
-    deets = [id, date, recur]
-    return deets
+    return transaction
 end
 
-def delete_trans_by_id(un, trans_id)
-    csv = CSV.read("user_transactions/#{un}_transactions.csv", headers: true)
-    csv.delete_if { |row| row["id"].to_s == trans_id }
-    CSV.open("user_transactions/#{un}_transactions.csv", "w", headers: true) do |row|
+def delete_transaction_by_id(user, transaction)
+    user_trans = CSV.read("user_transactions/#{user.username}_transactions.csv", headers: true)
+    user_trans.delete_if { |row| row["id"].to_i == transaction.id }
+    CSV.open("user_transactions/#{user.username}_transactions.csv", "w", headers: true) do |row|
         row << ["id", "date", "amount", "description", "category", "recur"]
-        csv.each { |trans| row << trans }
+        user_trans.each { |trans| row << trans }
     end
 end
 
-def delete_trans_by_date_id(un, date, trans_id)
-    csv = CSV.read("user_transactions/#{un}_transactions.csv", headers: true)
-    csv.delete_if { |row| row["id"].to_s == trans_id && row["date"] == date }
-    CSV.open("user_transactions/#{un}_transactions.csv", "w", headers: true) do |row|
+def delete_transaction_by_date_id(user, transaction)
+    user_trans = CSV.read("user_transactions/#{user.username}_transactions.csv", headers: true)
+    user_trans.delete_if { |row| row["id"].to_i == transaction.id && row["date"] == transaction.date }
+    CSV.open("user_transactions/#{user.username}_transactions.csv", "w", headers: true) do |row|
         row << ["id", "date", "amount", "description", "category", "recur"]
-        csv.each { |trans| row << trans }
+        user_trans.each { |trans| row << trans }
     end
 end
 
@@ -44,64 +37,64 @@ def edit_transaction_process(user)
     run = true
     while run
         puts "What would you like to do?"
-        puts "1 - Edit transaction"
-        puts "2 - Delete transaction"
+        puts "1 - EDIT TRANSACTION"
+        puts "2 - DELETE TRANSACTION"
         opt = gets.chomp.to_i
         case opt
         when 1
             puts "Please enter the ID of the transaction you would like to edit"
-            trans_details = get_trans_by_id(uname)
-            if trans_details[2] == 1
+            transaction = get_transaction_by_id(user)
+            if transaction.recur == 1
                 puts "This is part of a recurring transaction. Would you like to edit the entire series, or just this instance?"
-                puts "1 - Just this transaction"
-                puts "2 - Edit entire series"
+                puts "1 - JUST THIS TRANSACTION"
+                puts "2 - EDIT ENTIRE SERIES"
                 opt = gets.chomp.to_i
                 case opt
                 when 1
-                    delete_trans_by_date_id(uname, trans_details[1], trans_details[0])
-                    add_single_trans(uname)
+                    delete_transaction_by_date_id(user, transaction)
+                    add_single_transaction_process(user)
                     run = false
                 when 2
-                    delete_trans_by_id(uname, trans_details[0])
-                    add_recurring_trans(uname)
+                    delete_transaction_by_id(user, transaction)
+                    add_recurring_transaction_process(user)
                     run = false
                 else
                     "Please only enter 1 or 2"
                 end
-            elsif trans_details[2] == 0
-                delete_trans_by_id(uname, trans_details[0])
-                add_single_trans(uname)
+            elsif transaction.recur == 0
+                delete_transaction_by_id(user, transaction)
+                add_single_transaction_process(user)
                 run = false
             end
         when 2
             puts "Please enter the ID of the transaction you would like to delete"
-            trans_details = get_trans_by_id(uname)
-            if trans_details[2] == 1
+            transaction = get_transaction_by_id(user)
+            if transaction.recur == 1
                 puts "This is part of a recurring transaction. Would you like to delete the entire series, or just this instance?"
-                puts "1 - Just this transaction"
-                puts "2 - Delete entire series"
+                puts "1 - JUST THIS TRANSACTION"
+                puts "2 - DELETE ENTIRE SERIES"
                 opt = gets.chomp.to_i
                 case opt
                 when 1
-                    delete_trans_by_date_id(uname, trans_details[1], trans_details[0])
+                    delete_transaction_by_date_id(user, transaction)
                     puts "Deletion successful"
                     run = false
                 when 2
-                    delete_trans_by_id(uname, trans_details[0])
+                    delete_transaction_by_id(user, transaction)
                     puts "Deletion successful"
                     run = false
                 else
                     "Please only enter 1 or 2"
                 end
-            elsif trans_details[2] == 0
-                delete_trans_by_id(uname, trans_details[0])
+            elsif transaction.recur == 0
+                delete_transaction_by_id(user, transaction)
                 puts "Deletion successful"
                 run = false
             else
                 puts "Something has gone wrong here...sorry"
             end
         else
-            puts "Please onter enter 1 or 2"
+            puts "Please only enter 1 or 2"
         end
     end
 end

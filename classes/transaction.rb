@@ -1,6 +1,7 @@
 require("csv")
 
 class Transaction
+    attr_accessor :id, :date, :amount, :description, :category, :recur
     def initialize(username, id, date, amount, description, category, recur=0)
         @username = username
         @id = id
