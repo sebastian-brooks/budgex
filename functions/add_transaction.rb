@@ -1,14 +1,17 @@
+require("tty-font")
 require("tty-prompt")
+require("rainbow/refinement")
 require_relative("../classes/recurring")
 require_relative("../classes/transaction")
 require_relative("../classes/user")
 require_relative("get_amount")
 require_relative("get_date")
+using Rainbow
 
 def get_transaction_amount
     choices = ["EXPENSE", "INCOME"]
     opt = TTY::Prompt.new.select("Is this income or an expense?", choices)
-    puts "Please enter the amount of the transaction [FORMAT: whole number or decimal (e.g. 9.25)]"
+    puts "Please enter the amount of the transaction [FORMAT: positive whole number or decimal (e.g. 9.25)]"
     amount = get_amount()
     if opt == choices[0]
         amount = -amount
@@ -117,6 +120,9 @@ def add_recurring_transaction_process(user)
 end
 
 def add_transaction_process(user)
+    system "clear"
+    font = TTY::Font.new(:starwars)
+    puts font.write(" --  BUDGEX  -- ").color(:green)
     run = true
     while run
         choices = [

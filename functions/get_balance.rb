@@ -1,6 +1,10 @@
 require("csv")
+require("rainbow/refinement")
 require("tty-prompt")
+require("tty-table")
 require_relative("get_date")
+
+using Rainbow
 
 def retrieve_stored_balance(user)
     bal = {}
@@ -28,7 +32,13 @@ def get_balance(user, fut=0, date=nil)
             bal_amt += row["amount"].to_f
         end
     }
-    puts "Balance at #{date}: #{bal_amt.to_d}"
+    case fut
+    when 0
+        table = TTY::Table.new(["  BALANCE  ".bright], [["  #{bal_amt.to_d}".color(:goldenrod)]])
+    when 1
+        table = TTY::Table.new(["  BALANCE AS OF #{date}  ".bright], [["  #{bal_amt.to_d}".color(:goldenrod)]])
+    end
+    puts table.render(:ascii)
     return bal_amt
 end
 
@@ -56,14 +66,14 @@ end
 def check_balance_process(user)
     run = true
     while run
-        choices = ["GET CURRENT BALANCE", "GET FUTURE DATE BALANCE", "RETURN TO MAIN MENU"]
+        choices = ["GET FUTURE DATE BALANCE", "DEBT CHECK", "RETURN TO MAIN MENU"]
         opt = TTY::Prompt.new.select("", choices)
         case opt
         when choices[0]
-            get_balance(user)
+            get_balance(user, 1)
             run = false
         when choices[1]
-            get_balance(user, 1)
+            sub_zero_balance_check(user)
             run = false
         when choices[2]
             run = false

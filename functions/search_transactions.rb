@@ -1,8 +1,12 @@
 require("csv")
+require("rainbow/refinement")
 require("tty-prompt")
+require("tty-table")
 require_relative("add_transaction")
 require_relative("edit_transaction")
 require_relative("get_balance")
+
+using Rainbow
 
 def search_transactions_by_date(user)
     search_date = nil
@@ -11,11 +15,14 @@ def search_transactions_by_date(user)
         puts "Leave blank for today's date"
         search_date = get_date()
     end
+    search_results = []
     CSV.foreach("user_transactions/#{user.username}_transactions.csv", headers: true).select { |row|
         if row["date"] == search_date
-            puts "#{row["id"]} | #{row["date"]} | #{row["amount"]} | #{row["description"]} | #{row["category"]}"
+            search_results << [row["id"], row["date"], row["amount"], row["description"], row["category"]]
         end
     }
+    table = TTY::Table.new(["ID", "DATE", "AMOUNT", "DESCRIPTION", "CATEGORY"], search_results)
+    puts table.render(:ascii)
     get_balance(user, 0, search_date)
     check_user_edit_preference(user)
 end
@@ -33,22 +40,28 @@ def search_transactions_by_date_range(user)
         puts "Leave blank for the maximum date (5 years from today)"
         end_date = get_date(1)
     end
+    search_results = []
     CSV.foreach("user_transactions/#{user.username}_transactions.csv", headers: true).select { |row|
         if row["date"] >= start_date && row["date"] <= end_date
-            puts "#{row["id"]} | #{row["date"]} | #{row["amount"]} | #{row["description"]} | #{row["category"]}"
+            search_results << [row["id"], row["date"], row["amount"], row["description"], row["category"]]
         end
     }
+    table = TTY::Table.new(["ID", "DATE", "AMOUNT", "DESCRIPTION", "CATEGORY"], search_results)
+    puts table.render(:ascii)
     get_balance(user, 0, end_date)
     check_user_edit_preference(user)
 end
 
 def search_transactions_by_category(user)
     category = get_transaction_category()
+    search_results = []
     CSV.foreach("user_transactions/#{user.username}_transactions.csv", headers: true).select { |row|
         if row["category"] == category
-            puts "#{row["id"]} | #{row["date"]} | #{row["amount"]} | #{row["description"]} | #{row["category"]}"
+            search_results << [row["id"], row["date"], row["amount"], row["description"], row["category"]]
         end
     }
+    table = TTY::Table.new(["ID", "DATE", "AMOUNT", "DESCRIPTION", "CATEGORY"], search_results)
+    puts table.render(:ascii)
     check_user_edit_preference(user)
 end
 
@@ -66,11 +79,14 @@ def search_transactions_by_category_date_range(user)
         end_date = get_date(1)
     end
     category = get_transaction_category()
+    search_results = []
     CSV.foreach("user_transactions/#{user.username}_transactions.csv", headers: true).select { |row|
         if row["category"] == category && row["date"] >= start_date && row["date"] <= end_date
-            puts "#{row["id"]} | #{row["date"]} | #{row["amount"]} | #{row["description"]} | #{row["category"]}"
+            search_results << [row["id"], row["date"], row["amount"], row["description"], row["category"]]
         end
     }
+    table = TTY::Table.new(["ID", "DATE", "AMOUNT", "DESCRIPTION", "CATEGORY"], search_results)
+    puts table.render(:ascii)
     get_balance(user, 0, end_date)
     check_user_edit_preference(user)
 end
