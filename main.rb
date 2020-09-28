@@ -12,9 +12,9 @@ require_relative("functions/delete_user")
 using Rainbow
 
 # Login/signup process
-clear_screen_print_logo()
 user = nil
 while user.nil?
+    clear_screen_print_logo()
     choices = ["SIGNUP", "LOGIN", "EXIT"]
     opt = TTY::Prompt.new.select("Welcome to BUDGEX!", choices)
     case opt
