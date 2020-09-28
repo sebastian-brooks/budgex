@@ -29,9 +29,11 @@ def get_transaction_description
         if description.empty? || description.strip().empty?
             description = nil
             puts "DO NOT TAKE ME FOR A FOOL - YOU MUST ENTER A DESCRIPTION".red
+        elsif description.length > 50
+            description = description.gsub(",", "")[0..49]
         end
     end
-    return description.gsub(",", "")
+    return description
 end
 
 def get_transaction_category

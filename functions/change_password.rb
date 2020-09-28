@@ -6,7 +6,7 @@ using Rainbow
 
 def change_password_process(user)
     clear_screen_print_logo()
-    puts "Sure, you can change your password (if you're into that sort of thing)"
+    puts "Sure, you can change your password (if you're into that sort of thing....weirdo)"
     puts "\nBut first please confirm your current password coz fraud 'n' that".cyan
     attempts = 0
     result = nil
