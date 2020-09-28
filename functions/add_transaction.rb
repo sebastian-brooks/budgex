@@ -84,6 +84,12 @@ def get_recurrence_frequency
     return freq.to_i
 end
 
+def check_user_add_preference(user)
+    choices = ["ADD ANOTHER TRANSACTION", "RETURN TO MAIN MENU"]
+    opt = TTY::Prompt.new.select("", choices)
+    add_transaction_process(user) if opt == choices[0]
+end
+
 def add_single_transaction_process(user)
     clear_screen_print_logo()
     date = nil
@@ -103,6 +109,9 @@ def add_single_transaction_process(user)
     new_transaction = Transaction.new(user.username, id, date, amount, description, category)
     new_transaction.add()
     user.sort_transactions
+    clear_screen_print_logo()
+    puts "Transaction added!\n".color(:orange)
+    check_user_add_preference(user)
 end
 
 def add_recurring_transaction_process(user)
@@ -136,6 +145,9 @@ def add_recurring_transaction_process(user)
     new_recurrence = Recurring.new(user.username, id, start_date, amount, description, category, 1, interval, frequency, end_date)
     new_recurrence.add()
     user.sort_transactions
+    clear_screen_print_logo()
+    puts "Recurring schedule added!\n".color(:orange)
+    check_user_add_preference(user)
 end
 
 def add_transaction_process(user)
@@ -151,12 +163,10 @@ def add_transaction_process(user)
         case opt
         when choices[0]
             add_single_transaction_process(user)
-            clear_screen_print_logo()
-            puts "\nTransaction added!\n".color(:orange)
+            run = false
         when choices[1]
             add_recurring_transaction_process(user)
-            clear_screen_print_logo()
-            puts "\nRecurring transactions added!\n".color(:orange)
+            run = false
         when choices[2]
             run = false
         end

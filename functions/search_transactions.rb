@@ -37,7 +37,7 @@ def search_transactions_by_date_range(user)
     else
         puts "SEARCH RESULTS".color(:goldenrod).underline
         puts table.render(:ascii)
-        get_balance(user, 0, search_date)
+        get_balance(user, 0, date_range[1])
     end
     check_user_edit_preference(user)
 end
@@ -57,6 +57,7 @@ end
 
 def search_transactions_by_category_date_range(user)
     date_range = get_date_range(user)
+    clear_screen_print_logo()
     category = get_transaction_category()
     table = transaction_search(user, "cat date range", date_range[0], category, date_range[1])
     clear_screen_print_logo()
@@ -65,7 +66,7 @@ def search_transactions_by_category_date_range(user)
     else
         puts "SEARCH RESULTS".color(:goldenrod).underline
         puts table.render(:ascii)
-        get_balance(user, 0, search_date)
+        get_balance(user, 0, date_range[1])
     end
     check_user_edit_preference(user)
 end
@@ -89,6 +90,7 @@ def get_date_range(user)
         puts "Leave blank to use today's date".cyan.bright
         start_date = get_date
     end
+    clear_screen_print_logo()
     end_date = nil
     while end_date.nil?
         puts "ENTER THE DATE RANGE END DATE"

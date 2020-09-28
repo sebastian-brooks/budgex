@@ -9,6 +9,7 @@ require_relative("functions/user_login")
 require_relative("functions/user_signup")
 require("rainbow/refinement")
 require("tty-prompt")
+require("tty-table")
 using Rainbow
 
 # Login/signup process
@@ -32,11 +33,12 @@ end
 # Main program navigation/process
 while true
     clear_screen_print_logo()
-    # get_balance(user, 0, Date.today.to_s)
+    balance = get_balance(user, 0, Date.today.to_s)[0]
+    puts balance.render(:ascii)
     choices = [
         "ADD TRANSACTION",
         "SEARCH TRANSACTIONS",
-        "CHECK BALANCE/DEBT CHECK",
+        "FUTURE BALANCE/DEBT CHECK",
         "CHANGE PASSWORD",
         "DELETE ACCOUNT",
         "LOGOUT"
