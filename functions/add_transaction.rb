@@ -1,9 +1,10 @@
-require("tty-font")
+# require("tty-font")
 require("tty-prompt")
 require("rainbow/refinement")
 require_relative("../classes/recurring")
 require_relative("../classes/transaction")
 require_relative("../classes/user")
+require_relative("clear_screen_leave_logo")
 require_relative("get_amount")
 require_relative("get_date")
 using Rainbow
@@ -11,7 +12,8 @@ using Rainbow
 def get_transaction_amount
     choices = ["EXPENSE", "INCOME"]
     opt = TTY::Prompt.new.select("Is this income or an expense?", choices)
-    puts "Please enter the amount of the transaction [FORMAT: positive whole number or decimal (e.g. 9.25)]"
+    puts "\nENTER THE AMOUNT OF THE TRANSACTION"
+    puts "FORMAT: positive whole number or decimal e.g. 9.25".color(:darkgray).italic
     amount = get_amount()
     if opt == choices[0]
         amount = -amount
@@ -23,10 +25,11 @@ def get_transaction_description
     description = nil
     while description.nil?
         puts "What is the transaction for?"
+        puts "e.g. cat food".color(:darkgray).italic
         description = gets.chomp
         if description.empty? || description.strip().empty?
             description = nil
-            puts "Please enter a description of the transaction"
+            puts "DO NOT TAKE ME FOR A FOOL - YOU MUST ENTER A DESCRIPTION".red
         end
     end
     return description.gsub(",", "")
@@ -44,7 +47,7 @@ def get_transaction_category
         "PERSONAL",
         "OTHER"
     ]
-    category = TTY::Prompt.new.select("Select a category that best describes the transaction", category_list)
+    category = TTY::Prompt.new.select("SELECT A CATEGORY THAT BEST DESCRIBES THE TRANSACTION", category_list)
     return category
 end
 
@@ -58,7 +61,8 @@ end
 def get_recurrence_frequency
     freq = nil
     while freq.nil?
-        puts "How frequently do you want this to recur? e.g. every month/week/year (enter 1), every 2 weeks/months/years (enter 2) etc"
+        puts "How frequently do you want this to recur?"
+        puts "e.g. every month/week/year (enter 1), every 2 weeks/months/years (enter 2) etc".color(:darkgray).italic
         freq = gets.chomp
         if freq == "0"
             freq = ""
@@ -66,13 +70,13 @@ def get_recurrence_frequency
         begin
             freq.empty?
         rescue
-            puts "That is an invalid frequency - please enter a whole number greater than 0"
+            puts "That is an invalid frequency - enter a whole number greater than 0".red
             freq = nil
         end
         begin
             Integer(freq)
         rescue
-            puts "That is an invalid frequency - please enter a whole number greater than 0"
+            puts "That is an invalid frequency - enter a whole number greater than 0".red
             freq = nil
         end
     end
@@ -80,14 +84,19 @@ def get_recurrence_frequency
 end
 
 def add_single_transaction_process(user)
+    clear_screen_print_logo()
     date = nil
     while date.nil?
-        puts "Enter the transaction date [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
-        puts "Leave blank to use today's date"
+        puts "ENTER THE TRANSACTION DATE"
+        puts "FORMAT: YYYY-MM-DD e.g. Dec 31st 1995 = 1995-12-31".color(:darkgray).italic
+        puts "leave blank to use today's date".cyan.bright
         date = get_date()
     end
+    clear_screen_print_logo()
     amount = get_transaction_amount()
+    clear_screen_print_logo()
     description = get_transaction_description()
+    clear_screen_print_logo()
     category = get_transaction_category()
     id = user.generate_new_transaction_id
     new_transaction = Transaction.new(user.username, id, date, amount, description, category)
@@ -96,22 +105,31 @@ def add_single_transaction_process(user)
 end
 
 def add_recurring_transaction_process(user)
+    clear_screen_print_logo()
     start_date = nil
     while start_date.nil?
-        puts "Please enter the date you want the recurrence to start [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
-        puts "Leave blank to use today's date"
+        puts "ENTER THE DATE YOU WANT THE RECURRENCE TO BEGIN"
+        puts "FORMAT: YYYY-MM-DD e.g. Dec 31st 1995 = 1995-12-31".color(:darkgray).italic
+        puts "leave blank to use today's date".cyan.bright
         start_date = get_date()
     end
+    clear_screen_print_logo()
     end_date = nil
     while end_date.nil?
-        puts "Enter a date when the recurrence will end [FORMAT: YYYY-MM-DD (e.g. Dec 31st 1995 = 1995-12-31)]"
-        puts "Leave blank to set maximum (5 years)"
+        puts "ENTER THE DATE THE RECURRENCE WILL END"
+        puts "FORMAT: YYYY-MM-DD e.g. Dec 31st 1995 = 1995-12-31".color(:darkgray).italic
+        puts "leave blank to set maximum (5 years)".cyan.bright
         end_date = get_date(1)
     end
+    clear_screen_print_logo()
     amount = get_transaction_amount()
+    clear_screen_print_logo()
     description = get_transaction_description()
+    clear_screen_print_logo()
     category = get_transaction_category()
+    clear_screen_print_logo()
     interval = get_recurrence_interval()
+    clear_screen_print_logo()
     frequency = get_recurrence_frequency()
     id = user.generate_new_transaction_id
     new_recurrence = Recurring.new(user.username, id, start_date, amount, description, category, 1, interval, frequency, end_date)
@@ -120,9 +138,7 @@ def add_recurring_transaction_process(user)
 end
 
 def add_transaction_process(user)
-    system "clear"
-    font = TTY::Font.new(:starwars)
-    puts font.write(" --  BUDGEX  -- ").color(:green)
+    clear_screen_print_logo()
     run = true
     while run
         choices = [
@@ -134,10 +150,12 @@ def add_transaction_process(user)
         case opt
         when choices[0]
             add_single_transaction_process(user)
-            run = false
+            clear_screen_print_logo()
+            puts "\nTransaction added!\n".color(:orange)
         when choices[1]
             add_recurring_transaction_process(user)
-            run = false
+            clear_screen_print_logo()
+            puts "\nRecurring transactions added!\n".color(:orange)
         when choices[2]
             run = false
         end

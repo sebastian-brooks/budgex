@@ -22,7 +22,6 @@ class Recurring < Transaction
                 i += 1
             end
         end
-        puts "Recurring transaction added"
     end
 
     def get_recurrence_dates

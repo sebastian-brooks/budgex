@@ -17,6 +17,5 @@ class Transaction
         CSV.open("user_transactions/#{@username}_transactions.csv", "a") do |row|
             row << @transaction.values.to_a
         end
-        puts "Transaction added"
     end
 end

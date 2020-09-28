@@ -1,3 +1,6 @@
+require("rainbow/refinement")
+using Rainbow
+
 def get_amount
     amount = nil
     while amount.nil?
@@ -11,10 +14,10 @@ def get_amount
             begin
                 Float(amount)
             rescue
-                puts "Nope, that's an invalid amount"
+                puts "Nope, that's an invalid amount".red
                 amount = nil
             end
         end
     end
-    return amount.to_f
+    return amount.to_f.abs
 end

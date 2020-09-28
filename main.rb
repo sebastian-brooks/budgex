@@ -1,6 +1,6 @@
 require("rainbow/refinement")
-require("tty-font")
 require("tty-prompt")
+require_relative("functions/clear_screen_leave_logo")
 require_relative("functions/user_signup")
 require_relative("functions/user_login")
 require_relative("functions/add_transaction")
@@ -10,12 +10,9 @@ require_relative("functions/get_balance")
 require_relative("functions/change_password")
 require_relative("functions/delete_user")
 using Rainbow
-system "clear"
-
-font = TTY::Font.new(:starwars)
-puts font.write(" --  BUDGEX  -- ").color(:green)
 
 # Login/signup process
+clear_screen_print_logo()
 user = nil
 while user.nil?
     choices = ["SIGNUP", "LOGIN", "EXIT"]
@@ -26,6 +23,7 @@ while user.nil?
     when choices[1]
         user = user_login_process()
     when choices[2]
+        system "clear"
         puts "But I hardly knew you...".red.bright
         exit
     end
@@ -33,8 +31,7 @@ end
 
 # Main program navigation
 while true
-    system "clear"
-    puts font.write(" --  BUDGEX  -- ").color(:green)
+    clear_screen_print_logo()
     get_balance(user, 0, Date.today.to_s)
     choices = [
         "ADD TRANSACTION",
@@ -56,9 +53,11 @@ while true
         change_password_process(user)
     when choices[4]
         delete_user_process(user)
-        puts "Don't forget to blink lest your eyeballs dry up, fall out of their sockets and dangle on your cheek like Caeser's shrivelled coglio".red
+        system "clear"
+        puts "Don't forget to blink lest your eyeballs dry up, \nfall out of their sockets and dangle on your cheek \nlike Caeser's shrivelled coglio".red
         exit
     when choices[5]
+        system "clear"
         puts "Thanks for stopping by. Watch your back.".color(:darksalmon)
         exit
     end
