@@ -16,7 +16,7 @@ user = nil
 while user.nil?
     clear_screen_print_logo()
     choices = ["SIGNUP", "LOGIN", "EXIT"]
-    opt = TTY::Prompt.new.select("Welcome to BUDGEX!", choices)
+    opt = TTY::Prompt.new.select("", choices)
     case opt
     when choices[0]
         user = user_signup_process()
@@ -32,7 +32,7 @@ end
 # Main program navigation/process
 while true
     clear_screen_print_logo()
-    get_balance(user, 0, Date.today.to_s)
+    # get_balance(user, 0, Date.today.to_s)
     choices = [
         "ADD TRANSACTION",
         "SEARCH TRANSACTIONS",
@@ -41,7 +41,7 @@ while true
         "DELETE ACCOUNT",
         "LOGOUT"
     ]
-    opt = TTY::Prompt.new.select("\nHi #{user.username.upcase}! What would you like to do?\n".bright, choices)
+    opt = TTY::Prompt.new.select("\nHi #{user.username.upcase}! What would you like to do?\n".color(:cornflower), choices)
     case opt
     when choices[0]
         add_transaction_process(user)
