@@ -60,10 +60,10 @@ def sub_zero_balance_check(user)
     }
     clear_screen_print_logo()
     if scary_dates.size == 0
-        puts "Great news! \nYou should have enough funds for all your scheduled expenses! \nKeep up the great work!".color(:indigo).bright
+        puts "Great news! \n \nYou should have enough funds for all your scheduled expenses! \n \nKeep up the great work!".color(:lightgreen).bright
     else
         puts "OH SHIT!".color(:crimson).bright.underline.blink
-        puts "YOU WON'T HAVE ENOUGH MONEY ON #{scary_dates.sort[0]}!".color(:crimson).bright
+        puts "\nYOU WON'T HAVE ENOUGH MONEY ON #{scary_dates.sort[0]}!".color(:crimson).bright
     end
     check_user_bal_preference(user)
 end

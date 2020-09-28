@@ -13,7 +13,7 @@ def get_date(pref=0)
             Date.iso8601(date)
         rescue ArgumentError
             date = nil
-            puts "That date is not valid."
+            puts "\nINVALID DATE\n".red.bright
         end
     end
     if date != nil && date.length < 10
