@@ -1,8 +1,8 @@
+require_relative("get_date")
 require("csv")
 require("rainbow/refinement")
 require("tty-prompt")
 require("tty-table")
-require_relative("get_date")
 using Rainbow
 
 def retrieve_stored_balance(user)

@@ -1,14 +1,14 @@
-require("rainbow/refinement")
-require("tty-prompt")
-require_relative("functions/clear_screen_leave_logo")
-require_relative("functions/user_signup")
-require_relative("functions/user_login")
 require_relative("functions/add_transaction")
-require_relative("functions/search_transactions")
+require_relative("functions/change_password")
+require_relative("functions/clear_screen_leave_logo")
+require_relative("functions/delete_user")
 require_relative("functions/edit_transaction")
 require_relative("functions/get_balance")
-require_relative("functions/change_password")
-require_relative("functions/delete_user")
+require_relative("functions/search_transactions")
+require_relative("functions/user_login")
+require_relative("functions/user_signup")
+require("rainbow/refinement")
+require("tty-prompt")
 using Rainbow
 
 # Login/signup process
@@ -24,12 +24,12 @@ while user.nil?
         user = user_login_process()
     when choices[2]
         system "clear"
-        puts "But I hardly knew you...".red.bright
+        puts "Like ships in the night...".color(:darksalmon)
         exit
     end
 end
 
-# Main program navigation
+# Main program navigation/process
 while true
     clear_screen_print_logo()
     get_balance(user, 0, Date.today.to_s)
@@ -41,7 +41,7 @@ while true
         "DELETE ACCOUNT",
         "LOGOUT"
     ]
-    opt = TTY::Prompt.new.select("\nHi #{user.username.upcase}! What would you like to do?\n".white.bright, choices)
+    opt = TTY::Prompt.new.select("\nHi #{user.username.upcase}! What would you like to do?\n".bright, choices)
     case opt
     when choices[0]
         add_transaction_process(user)

@@ -1,5 +1,7 @@
 require("csv")
 require("json")
+require("rainbow/refinement")
+using Rainbow
 
 class User
     attr_reader :username
@@ -35,15 +37,15 @@ class User
         if password == @password
             result = 1
         else
-            puts "Hmmm, the password you provided is incorrect. Are you a dirty fraudster?"
+            puts "\nHmmm, the password you provided is incorrect. Are you a dirty fraudster?".red.bright
         end
         return result
     end
     
     def password_strength_check(new_password)
-        if ! new_password.length.between?(8,16) || new_password.match(" ") || new_password.empty?
-            puts "Nope, that password doesn't meet the criteria"
-            puts "Password must consist of 8 to 16 characters with no spaces"
+        if new_password.nil? || ! new_password.length.between?(8,16) || new_password.match(" ") || new_password.empty?
+            puts "\nNope, that password doesn't meet the criteria".red
+            puts "\nPassword must consist of 8 to 16 characters with no spaces".color(:orange)
             new_password = nil
         end
         return new_password
@@ -58,7 +60,6 @@ class User
             end
         }
         File.write("users/users.json", JSON.generate(user_list))
-        puts "Password successfully updated"
     end
 
     def sort_transactions

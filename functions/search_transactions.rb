@@ -1,11 +1,10 @@
+require_relative("add_transaction")
+require_relative("edit_transaction")
+require_relative("get_balance")
 require("csv")
 require("rainbow/refinement")
 require("tty-prompt")
 require("tty-table")
-require_relative("add_transaction")
-require_relative("edit_transaction")
-require_relative("get_balance")
-
 using Rainbow
 
 def search_transactions_by_date(user)

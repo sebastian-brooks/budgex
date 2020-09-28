@@ -1,9 +1,11 @@
+require_relative("transaction")
 require("csv")
 require("date")
 require("recurrence")
-require_relative("transaction")
 
 class Recurring < Transaction
+    attr_accessor :interval, :frequency, :end_date
+
     def initialize(username, id, date, amount, description, category, recur=1, interval, frequency, end_date)
         super(username, id, date, amount, description, category, recur)
         @interval = interval
@@ -24,6 +26,7 @@ class Recurring < Transaction
         end
     end
 
+    # generate all dates used in recurring transaction series
     def get_recurrence_dates
         if @interval == :week
             dw = Date.iso8601(@date).wday

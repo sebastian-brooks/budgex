@@ -1,4 +1,6 @@
 require("json")
+require("rainbow/refinement")
+using Rainbow
 
 def check_username_in_users(username)
     result = 0
@@ -22,9 +24,11 @@ def check_login_details(username, password)
         end
     }
     if result.nil?
-        puts "Nope, those details couldn't be found"
+        puts "\nNope, those details couldn't be found".color(:orange).bright
+        sleep(1.5)
     elsif result == 0
-        puts "Hmmm, the username and password you provided don't match. Are you a dirty fraudster?"
+        puts "\nHmmm, the username and password you provided don't match. Are you a dirty fraudster?".color(:orange).bright
+        sleep(2)
     end
     return result
 end

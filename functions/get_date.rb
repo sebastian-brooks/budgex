@@ -1,4 +1,6 @@
 require("date")
+require("rainbow/refinement")
+using Rainbow
 
 def get_date(pref=0)
     date = gets.chomp

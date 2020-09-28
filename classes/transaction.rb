@@ -13,6 +13,7 @@ class Transaction
         @transaction = {id: @id, date: @date, amount: @amount, description: @description, category: @category, recur: @recur}
     end
 
+    # add transaction to the user's transactions csv
     def add
         CSV.open("user_transactions/#{@username}_transactions.csv", "a") do |row|
             row << @transaction.values.to_a

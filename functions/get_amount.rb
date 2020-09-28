@@ -14,7 +14,7 @@ def get_amount
             begin
                 Float(amount)
             rescue
-                puts "Nope, that's an invalid amount".red
+                puts "\nINVALID AMOUNT. TRY AGAIN.\n".red.bright
                 amount = nil
             end
         end

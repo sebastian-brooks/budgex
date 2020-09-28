@@ -1,5 +1,7 @@
-require("tty-prompt")
 require_relative("add_transaction")
+require("rainbow/refinement")
+require("tty-prompt")
+using Rainbow
 
 def get_transaction_by_id(user)
     transaction = nil
