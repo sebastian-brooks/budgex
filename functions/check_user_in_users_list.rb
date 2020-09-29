@@ -2,16 +2,16 @@ require("json")
 require("rainbow/refinement")
 using Rainbow
 
-def check_username_in_users(username)
-    result = 0
-    user_list = JSON.parse(File.read("users/users.json"))
-    user_list["users"].each { |user|
-        if user["username"] == username
-            result = 1
-        end
-    }
-    return result
-end
+# def check_username_in_users(username)
+#     result = 0
+#     user_list = JSON.parse(File.read("users/users.json"))
+#     user_list["users"].each { |user|
+#         if user["username"] == username
+#             result = 1
+#         end
+#     }
+#     return result
+# end
 
 def check_login_details(username, password)
     result = nil

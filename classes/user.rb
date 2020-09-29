@@ -32,6 +32,27 @@ class User
         end
     end
 
+    def confirm_login_details
+        result = nil
+        user_list = JSON.parse(File.read("users/users.json"))
+        user_list["users"].each { |user|
+            if user["username"] == @username && user["password"] == @password
+                result = 1
+                puts "Welcome back, #{@username.upcase}!"
+            elsif user["username"] == username && user["password"] != password
+                result = 0
+            end
+        }
+        if result.nil?
+            puts "\nThose login details couldn't be found".color(:orange).bright
+            sleep(1.5)
+        elsif result == 0
+            puts "\nHmmm, the username and password you provided don't match. Is that you, Gene Hackman?".color(:orange).bright
+            sleep(1.5)
+        end
+        return result
+    end
+
     def confirm_password(password)
         result = nil
         if password == @password
