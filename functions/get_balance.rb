@@ -40,7 +40,6 @@ def get_balance(user, fut=0, date=nil)
     when 1
         table = TTY::Table.new(["  BALANCE AS OF #{date}  ".bright], [["  #{bal_amt.to_d}".color(:goldenrod)]])
     end
-    # puts table.render(:ascii)
     return [table, bal_amt]
 end
 

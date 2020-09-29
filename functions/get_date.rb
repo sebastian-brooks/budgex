@@ -14,6 +14,7 @@ def get_date(pref=0)
         rescue ArgumentError
             date = nil
             puts "\nINVALID DATE\n".red.bright
+            sleep(1)
         end
     end
     if date != nil && date.length < 10

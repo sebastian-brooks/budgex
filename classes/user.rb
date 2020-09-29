@@ -5,7 +5,7 @@ using Rainbow
 
 class User
     attr_reader :username
-    attr_writer :password
+    attr_accessor :password
 
     def initialize(username, password)
         @username = username

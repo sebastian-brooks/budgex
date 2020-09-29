@@ -25,7 +25,7 @@ def search_transactions_by_date(user)
         puts table.render(:ascii)
         get_balance(user, 0, search_date)
     end
-    check_user_edit_preference(user)
+    check_user_edit_preference(user, "date only", search_date)
 end
 
 def search_transactions_by_date_range(user)
@@ -39,7 +39,7 @@ def search_transactions_by_date_range(user)
         puts table.render(:ascii)
         get_balance(user, 0, date_range[1])
     end
-    check_user_edit_preference(user)
+    check_user_edit_preference(user, "date range")
 end
 
 def search_transactions_by_category(user)
@@ -52,7 +52,7 @@ def search_transactions_by_category(user)
         puts "SEARCH RESULTS".color(:goldenrod).underline
         puts table.render(:ascii)
     end
-    check_user_edit_preference(user)
+    check_user_edit_preference(user, "cat only")
 end
 
 def search_transactions_by_category_date_range(user)
@@ -68,15 +68,15 @@ def search_transactions_by_category_date_range(user)
         puts table.render(:ascii)
         get_balance(user, 0, date_range[1])
     end
-    check_user_edit_preference(user)
+    check_user_edit_preference(user, "cat date range")
 end
 
-def check_user_edit_preference(user)
+def check_user_edit_preference(user, type, date=nil)
     choices = ["EDIT/DELETE TRANSACTION", "SEARCH AGAIN", "RETURN TO MAIN MENU"]
     opt = TTY::Prompt.new.select("", choices)
     case opt
     when choices[0]
-        edit_transaction_process(user)
+        edit_transaction_process(user, type, date)
     when choices[1]
         transaction_search_process(user)
     end
