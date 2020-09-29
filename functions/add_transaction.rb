@@ -90,8 +90,7 @@ def check_user_add_preference(user)
     add_transaction_process(user) if opt == choices[0]
 end
 
-def add_single_transaction_process(user)
-    clear_screen_print_logo()
+def single_date
     date = nil
     while date.nil?
         puts "ENTER THE TRANSACTION DATE"
@@ -99,6 +98,12 @@ def add_single_transaction_process(user)
         puts "Leave blank to use today's date".cyan.bright
         date = get_date()
     end
+    return date
+end
+
+def add_single_transaction_process(user)
+    clear_screen_print_logo()
+    date = single_date()
     clear_screen_print_logo()
     amount = get_transaction_amount()
     clear_screen_print_logo()
