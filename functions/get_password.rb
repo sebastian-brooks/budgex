@@ -17,7 +17,7 @@ def password_capture
 end
 
 def get_password(type=1)
-    # type arg: 0 for initial password creation, 1 for standard password capture
+    # type arg: 0 for new password creation, 1 for standard password capture
     if type == 0
         password = nil
         while password.nil?

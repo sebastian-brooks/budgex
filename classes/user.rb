@@ -58,18 +58,10 @@ class User
         if password == @password
             result = 1
         else
-            puts "\nHmmm, the password you provided is incorrect. Are you a dirty fraudster?".red.bright
+            puts "\nThe password you provided is incorrect. Are you here to leak my wiki's, Julian Assange?".color(:orange).bright
+            sleep(1.5)
         end
         return result
-    end
-    
-    def password_strength_check(new_password)
-        if new_password.nil? || ! new_password.length.between?(8,16) || new_password.match(" ") || new_password.empty?
-            puts "\nNope, that password doesn't meet the criteria".red
-            puts "\nPassword must consist of 8 to 16 characters with no spaces".color(:orange)
-            new_password = nil
-        end
-        return new_password
     end
 
     def update_password(new_password)

@@ -1,12 +1,12 @@
 require_relative("functions/add_transaction")
-require_relative("functions/change_password")
-require_relative("functions/clear_screen_leave_logo")
-require_relative("functions/delete_user")
+require_relative("control/change_password")
+require_relative("control/delete_user")
 require_relative("functions/edit_transaction")
 require_relative("functions/get_balance")
 require_relative("functions/search_transactions")
 require_relative("control/user_login")
 require_relative("control/user_signup")
+require_relative("functions/clear_screen_leave_logo")
 require("rainbow/refinement")
 require("tty-prompt")
 require("tty-table")
@@ -25,7 +25,7 @@ while user.nil?
         user = user_login_process()
     when choices[2]
         system "clear"
-        puts "Like ships in the night...".color(:darksalmon)
+        puts "Well that was fun".color(:crimson)
         exit
     end
 end
@@ -56,7 +56,6 @@ while true
     when choices[4]
         delete_user_process(user)
         system "clear"
-        puts "Don't forget to blink lest your eyeballs dry up, \nfall out of their sockets and dangle on your cheek \nlike Caeser's shrivelled coglio".red
         exit
     when choices[5]
         system "clear"
