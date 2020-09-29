@@ -2,6 +2,7 @@ require_relative("../classes/recurring")
 require_relative("../classes/transaction")
 require_relative("add_transaction")
 require_relative("clear_screen_leave_logo")
+require_relative("get_amount")
 require_relative("get_date")
 require("rainbow/refinement")
 require("tty-prompt")
@@ -61,7 +62,7 @@ def edit_single_transaction(user, transaction)
         when choices[0]
             transaction.date = single_date()
         when choices[1]
-            transaction.amount = get_transaction_amount()
+            transaction.amount = get_amount(1)
         when choices[2]
             transaction.description = get_transaction_description()
         when choices[3]
@@ -80,8 +81,6 @@ def edit_single_transaction(user, transaction)
         end
     end
 end
-
-
 
 def edit_transaction_process(user, type, date=nil)
     run = true
