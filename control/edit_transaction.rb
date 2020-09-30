@@ -1,6 +1,6 @@
 require_relative("../classes/recurring")
 require_relative("../classes/transaction")
-require_relative("add_transaction")
+require_relative("../control/add_transaction")
 require_relative("clear_screen_leave_logo")
 require_relative("get_amount")
 require_relative("get_date")

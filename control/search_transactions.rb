@@ -1,4 +1,4 @@
-require_relative("add_transaction")
+require_relative("../control/add_transaction")
 require_relative("clear_screen_leave_logo")
 require_relative("edit_transaction")
 require_relative("get_balance")

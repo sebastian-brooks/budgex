@@ -1,20 +1,22 @@
 id,date,amount,description,category,recur
-7,2020-09-28,-2.0,food,FOOD/DRINK,0
-9,2020-09-28,-1.0,poop,FOOD/DRINK,0
 4,2020-09-28,44.0,choo choo,TRAVEL,0
 1,2020-09-28,-100.0,cherriez,FOOD/DRINK,0
 5,2020-09-28,99.99,big banana holder for my armchair,HOUSEHOLD,0
 2,2020-09-28,-1.0,farts,OTHER,0
+7,2020-09-28,-2.0,food,FOOD/DRINK,0
 8,2020-09-28,3.0,pee,FOOD/DRINK,0
+9,2020-09-28,-1.0,poop,FOOD/DRINK,0
+21,2020-09-29,-1.0,blood,INCOME,1
+20,2020-09-29,45.67,ddd,FOOD/DRINK,0
 26,2020-09-29,-1.0,crimpo,FOOD/DRINK,0
 25,2020-09-29,99.0,eyes fried,FOOD/DRINK,1
 24,2020-09-29,-99.0,fried eyes,FOOD/DRINK,1
 23,2020-09-29,100.0,cheese hands,FOOD/DRINK,0
 22,2020-09-29,-100.0,cat shit,FOOD/DRINK,0
-20,2020-09-29,45.67,ddd,FOOD/DRINK,0
-21,2020-09-29,-1.0,blood,INCOME,1
-10,2020-10-01,1.0,horse,FOOD/DRINK,0
+27,2020-09-30,-1.0,cat,TRAVEL,0
 6,2020-10-01,-1.0,dodo,FOOD/DRINK,0
+10,2020-10-01,1.0,horse,FOOD/DRINK,0
+28,2020-10-01,1.0,cat,FOOD/DRINK,0
 21,2020-10-29,-1.0,blood,INCOME,1
 21,2020-11-29,-1.0,blood,INCOME,1
 21,2020-12-29,-1.0,blood,INCOME,1
@@ -29,9 +31,9 @@ id,date,amount,description,category,recur
 21,2021-07-29,-1.0,blood,INCOME,1
 21,2021-08-29,-1.0,blood,INCOME,1
 10,2021-09-28,-0.1,horse,FOOD/DRINK,1
+25,2021-09-29,99.0,eyes fried,FOOD/DRINK,1
 24,2021-09-29,-99.0,fried eyes,FOOD/DRINK,1
 21,2021-09-29,-1.0,blood,INCOME,1
-25,2021-09-29,99.0,eyes fried,FOOD/DRINK,1
 21,2021-10-29,-1.0,blood,INCOME,1
 21,2021-11-29,-1.0,blood,INCOME,1
 21,2021-12-29,-1.0,blood,INCOME,1
@@ -59,9 +61,9 @@ id,date,amount,description,category,recur
 21,2023-07-29,-1.0,blood,INCOME,1
 21,2023-08-29,-1.0,blood,INCOME,1
 10,2023-09-28,-0.1,horse,FOOD/DRINK,1
+24,2023-09-29,-99.0,fried eyes,FOOD/DRINK,1
 21,2023-09-29,-1.0,blood,INCOME,1
 25,2023-09-29,99.0,eyes fried,FOOD/DRINK,1
-24,2023-09-29,-99.0,fried eyes,FOOD/DRINK,1
 21,2023-10-29,-1.0,blood,INCOME,1
 21,2023-11-29,-1.0,blood,INCOME,1
 21,2023-12-29,-1.0,blood,INCOME,1
@@ -75,9 +77,9 @@ id,date,amount,description,category,recur
 21,2024-08-29,-1.0,blood,INCOME,1
 11,2024-09-28,0.1,pony,FOOD/DRINK,0
 10,2024-09-28,-0.1,horse,FOOD/DRINK,1
+21,2024-09-29,-1.0,blood,INCOME,1
 25,2024-09-29,99.0,eyes fried,FOOD/DRINK,1
 24,2024-09-29,-99.0,fried eyes,FOOD/DRINK,1
-21,2024-09-29,-1.0,blood,INCOME,1
 21,2024-10-29,-1.0,blood,INCOME,1
 21,2024-11-29,-1.0,blood,INCOME,1
 21,2024-12-29,-1.0,blood,INCOME,1

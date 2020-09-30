@@ -1,9 +1,9 @@
 require_relative("../classes/recurring")
 require_relative("../classes/transaction")
 require_relative("../classes/user")
-require_relative("clear_screen_leave_logo")
-require_relative("get_amount")
-require_relative("get_date")
+require_relative("../functions/clear_screen_leave_logo")
+require_relative("../functions/get_amount")
+require_relative("../functions/get_date")
 require("rainbow/refinement")
 require("tty-prompt")
 using Rainbow
@@ -91,7 +91,14 @@ end
 
 def add_single_transaction_process(user)
     clear_screen_print_logo()
-    date = single_date()
+    choices = ["TODAY'S DATE", "ENTER A DIFFERENT DATE"]
+    opt = TTY::Prompt.new.select("Select the date of the transaction\n", choices)
+    if opt == choices[0]
+        date = get_date(0)
+    else
+        date = get_date(2)
+    end
+    # date = single_date()
     clear_screen_print_logo()
     amount = get_amount(1)
     clear_screen_print_logo()
@@ -109,25 +116,28 @@ end
 
 def add_recurring_transaction_process(user)
     clear_screen_print_logo()
-    start_date = nil
-    while start_date.nil?
-        puts "ENTER THE DATE YOU WANT THE RECURRENCE TO BEGIN"
-        puts "FORMAT: YYYY-MM-DD e.g. Dec 31st 1995 = 1995-12-31".color(:darkgray).italic
-        puts "Leave blank to use today's date".cyan.bright
-        start_date = get_date()
+    choices = ["TODAY'S DATE", "ENTER A DIFFERENT DATE"]
+    opt = TTY::Prompt.new.select("Select the starting date of the recurring transaction\n", choices)
+    if opt == choices[0]
+        start_date = get_date(0)
+    else
+        start_date = get_date(2)
     end
     clear_screen_print_logo()
-    end_date = nil
-    while end_date.nil?
-        puts "ENTER THE DATE THE RECURRENCE WILL END"
-        puts "FORMAT: YYYY-MM-DD e.g. Dec 31st 1995 = 1995-12-31".color(:darkgray).italic
-        puts "Leave blank to set maximum (5 years)".cyan.bright
-        end_date = get_date(1)
+    choices = ["SET MAXIMUM FUTURE DATE (5 YEARS FROM TODAY)", "ENTER A DIFFERENT DATE"]
+    opt = TTY::Prompt.new.select("Select the starting date of the recurring transaction\n", choices)
+    if opt == choices[0]
+        end_date = get_date(3)
+    else
+        end_date = get_date(2)
     end
+
     clear_screen_print_logo()
     amount = get_amount(1)
+
     clear_screen_print_logo()
     description = get_transaction_description()
+    
     clear_screen_print_logo()
     category = get_transaction_category()
     clear_screen_print_logo()
