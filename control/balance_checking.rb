@@ -24,7 +24,7 @@ def get_balance(user, type=0)
     end
     balance = retrieve_stored_balance(user)
     CSV.foreach("user_files/#{user.username}_transactions.csv", headers: true).select { |row|
-        if row["date"] >= balance[:date] && row["date"] <= balance[:date]
+        if row["date"] >= balance[:date] && row["date"] <= date
             balance[:amount] += row["amount"].to_f
         end
     }
@@ -56,7 +56,7 @@ def sub_zero_balance_check(user)
         puts "Great news! \n \nYou should have enough funds for all your scheduled expenses! \n \nKeep up the great work!".color(:lightgreen).bright
     else
         puts "OH SHIT!".color(:crimson).bright.underline.blink
-        puts "\nYOU WON'T HAVE ENOUGH MONEY ON #{Date.parse(scary_dates.sort[0]).strftime("%b %d %Y")}!".color(:crimson).bright
+        puts "\nYOU MAY HAVE ENOUGH MONEY ON #{Date.parse(scary_dates.sort[0]).strftime("%b %d %Y")}!".color(:crimson).bright
     end
     check_user_bal_preference(user)
 end

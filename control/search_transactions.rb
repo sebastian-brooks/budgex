@@ -45,7 +45,7 @@ def transaction_search_process(user)
             opt = TTY::Prompt.new.select("", choices)
             case opt
             when choices[0]
-                edit_transaction_process(user, type, date)
+                edit_transaction_process(user)
                 run = false
             when choices[1]
                 run = true

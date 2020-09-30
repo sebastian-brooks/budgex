@@ -1,9 +1,11 @@
 require_relative("../classes/recurring")
 require_relative("../classes/transaction")
+require_relative("add_transaction")
 require_relative("../methods/clear_screen_leave_logo")
 require_relative("../methods/get_amount")
 require_relative("../methods/get_date")
-require_relative("add_transaction")
+require_relative("../methods/get_transaction_category")
+require_relative("../methods/get_transaction_desc")
 require("rainbow/refinement")
 require("tty-prompt")
 using Rainbow
@@ -60,9 +62,9 @@ def edit_single_transaction(user, transaction)
         opt = TTY::Prompt.new.select("", choices)
         case opt
         when choices[0]
-            transaction.date = single_date()
+            transaction.date = get_date(2)
         when choices[1]
-            transaction.amount = get_amount(1)
+            transaction.amount = get_amount()
         when choices[2]
             transaction.description = get_transaction_description()
         when choices[3]
@@ -82,44 +84,57 @@ def edit_single_transaction(user, transaction)
     end
 end
 
-def edit_transaction_process(user, type, date=nil)
+def edit_transaction_process(user)
     run = true
     while run
         choices = ["EDIT TRANSACTION", "DELETE TRANSACTION"]
         opt = TTY::Prompt.new.select("", choices)
-        puts "\nENTER THE ID OF THE TRANSACTION YOU WANT TO EDIT"
+        puts "\nENTER THE ID OF THE TRANSACTION"
         id = gets.chomp
-        if type !=  "date only"
-            puts "\nENTER THE DATE OF THE TRANSACTION YOU WANT TO EDIT"
-            date = get_date()
-        end
+        puts "\nCONFIRM THE DATE OF THE TRANSACTION"
+        date = get_date(1)
         transaction = get_transaction_by_id_date(user, id, date)
-        case opt
-        when choices[0]
-            if transaction.recur == 0
+        if transaction.recur == 0 && opt == choices[0] # edit single
+            delete_transaction_by_id(user, transaction)
+            edit_single_transaction(user, transaction)
+            run = false
+        elsif transaction.recur == 0 && opt == choices[1] # delete single
+            choices = ["NO! I MADE A BIG MISTAKE!", "YES - DELETE IT ALREADY!"]
+            opt = TTY::Prompt.new.select("\nAre you sure you want to delete this transaction?".color(:orange), choices)
+            case opt
+            when choices[1]
                 delete_transaction_by_id(user, transaction)
+                puts "Deletion successful".color(:orange)
+                sleep(2)
+            end
+            run = false
+        elsif transaction.recur == 1
+            display_selected_transaction(transaction)
+            recur_choice = ["THIS TRANSACTION", "ENTIRE SERIES"]
+            recur_opt = TTY::Prompt.new.select("\nThis is part of a recurring series of transactions. \nShould this action affect the entire series, or just this instance?".color(:orange), recur_choice)
+            if recur_opt == recur_choice[0] && opt == choices[0] # edit single instance of recurring
+                delete_transaction_by_date_id(user, transaction)
                 edit_single_transaction(user, transaction)
                 run = false
-            elsif transaction.recur == 1
-                display_selected_transaction(transaction)
-                choices = ["JUST THIS TRANSACTION", "EDIT ENTIRE SERIES"]
-                opt = TTY::Prompt.new.select("\nThis is part of a recurring transaction. \nWould you like to edit the entire series, or just this instance?".color(:orange), choices)
-                case opt
-                when choices[0]
-                    delete_transaction_by_date_id(user, transaction)
-                    edit_single_transaction(user, transaction)
-                    run = false
-                when choices[1]
-                    delete_transaction_by_id(user, transaction)
-                    add_recurring_transaction_process(user)
-                    run = false
-                end
-            end
-        when choices[1]
-            display_selected_transaction(transaction)
-            if transaction.recur == 0
+            elsif recur_opt == recur_choice[1] && opt == choices[0] # edit entire series of recurring
+                delete_transaction_by_id(user, transaction)
+                puts "OK, time to set up the series again!"
+                sleep(2)
+                add_recurring_transaction_process(user)
+                run = false
+            elsif recur_opt == recur_choice[0] && opt == choices[1] # delete single instance of recurring
                 choices = ["NO! I MADE A BIG MISTAKE!", "YES - DELETE IT ALREADY!"]
                 opt = TTY::Prompt.new.select("\nAre you sure you want to delete this transaction?".color(:orange), choices)
+                case opt
+                when choices[1]
+                    delete_transaction_by_date_id(user, transaction)
+                    puts "Deletion successful".color(:orange)
+                    sleep(2)
+                end
+                run = false
+            elsif recur_opt == recur_choice[1] && opt == choices[1] # delete entire series of recurring
+                choices = ["NO! I MADE A BIG MISTAKE!", "YES - DELETE IT ALREADY!"]
+                opt = TTY::Prompt.new.select("\nAre you sure you want to delete all transactions in this recurring series?".color(:orange), choices)
                 case opt
                 when choices[1]
                     delete_transaction_by_id(user, transaction)
@@ -127,33 +142,6 @@ def edit_transaction_process(user, type, date=nil)
                     sleep(2)
                 end
                 run = false
-            elsif transaction.recur == 1
-                choices = ["JUST THIS TRANSACTION", "DELETE ENTIRE SERIES"]
-                opt = TTY::Prompt.new.select("\nThis is part of a recurring transaction. \nWould you like to delete the entire series, or just this instance?".color(:orange), choices)
-                case opt
-                when choices[0]
-                    choices = ["NO! I MADE A BIG MISTAKE!", "YES - DELETE IT ALREADY!"]
-                    opt = TTY::Prompt.new.select("\nAre you sure you want to delete this transaction?".color(:orange), choices)
-                    case opt
-                    when choices[1]
-                        delete_transaction_by_date_id(user, transaction)
-                        puts "Deletion successful".color(:orange)
-                        sleep(2)
-                    end
-                    run = false
-                when choices[1]
-                    choices = ["NO! I MADE A BIG MISTAKE!", "YES - DELETE IT ALREADY!"]
-                    opt = TTY::Prompt.new.select("\nAre you sure you want to delete this transaction?".color(:orange), choices)
-                    case opt
-                    when choices[1]
-                        delete_transaction_by_id(user, transaction)
-                        puts "Deletion successful".color(:orange)
-                        sleep(2)
-                    end
-                    run = false
-                end
-            else
-                puts "Something has gone wrong here...sorry"
             end
         end
     end
