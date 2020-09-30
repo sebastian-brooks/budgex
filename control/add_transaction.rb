@@ -1,92 +1,20 @@
 require_relative("../classes/recurring")
 require_relative("../classes/transaction")
 require_relative("../classes/user")
-require_relative("../functions/clear_screen_leave_logo")
-require_relative("../functions/get_amount")
-require_relative("../functions/get_date")
+require_relative("../methods/clear_screen_leave_logo")
+require_relative("../methods/get_amount")
+require_relative("../methods/get_date")
+require_relative("../methods/get_recurrence_schedule")
+require_relative("../methods/get_transaction_category")
+require_relative("../methods/get_transaction_desc")
 require("rainbow/refinement")
 require("tty-prompt")
 using Rainbow
-
-def get_transaction_description
-    description = nil
-    while description.nil?
-        puts "What is the transaction for?"
-        puts "e.g. cat food".color(:darkgray).italic
-        description = gets.chomp
-        if description.empty? || description.strip().empty?
-            description = nil
-            puts "DO NOT TAKE ME FOR A FOOL - YOU MUST ENTER A DESCRIPTION".red
-        elsif description.length > 50
-            description = description.gsub(",", "")[0..49]
-        end
-    end
-    return description
-end
-
-def get_transaction_category
-    category_list = [
-        "FOOD/DRINK",
-        "TRAVEL",
-        "RENT/MORTGAGE",
-        "INCOME",
-        "UTILITIES",
-        "HOUSEHOLD",
-        "ENTERTAINMENT",
-        "PERSONAL",
-        "OTHER"
-    ]
-    category = TTY::Prompt.new.select("SELECT A CATEGORY THAT BEST DESCRIBES THE TRANSACTION", category_list)
-    return category
-end
-
-def get_recurrence_interval
-    interval_list = ["WEEK", "MONTH", "YEAR"]
-    interval = TTY::Prompt.new.select("What interval will the transactions recur over?", interval_list)
-    interval = interval.downcase.to_sym
-    return interval
-end
-
-def get_recurrence_frequency
-    freq = nil
-    while freq.nil?
-        puts "How frequently do you want this to recur?"
-        puts "e.g. every month/week/year (enter 1), every 2 weeks/months/years (enter 2) etc".color(:darkgray).italic
-        freq = gets.chomp
-        if freq == "0"
-            freq = ""
-        end
-        begin
-            freq.empty?
-        rescue
-            puts "That is an invalid frequency - enter a whole number greater than 0".red
-            freq = nil
-        end
-        begin
-            Integer(freq)
-        rescue
-            puts "That is an invalid frequency - enter a whole number greater than 0".red
-            freq = nil
-        end
-    end
-    return freq.to_i
-end
 
 def check_user_add_preference(user)
     choices = ["ADD ANOTHER TRANSACTION", "RETURN TO MAIN MENU"]
     opt = TTY::Prompt.new.select("", choices)
     add_transaction_process(user) if opt == choices[0]
-end
-
-def single_date
-    date = nil
-    while date.nil?
-        puts "ENTER THE TRANSACTION DATE"
-        puts "FORMAT: YYYY-MM-DD e.g. Dec 31st 1995 = 1995-12-31".color(:darkgray).italic
-        puts "Leave blank to use today's date".cyan.bright
-        date = get_date()
-    end
-    return date
 end
 
 def add_single_transaction_process(user)
@@ -98,7 +26,6 @@ def add_single_transaction_process(user)
     else
         date = get_date(2)
     end
-    # date = single_date()
     clear_screen_print_logo()
     amount = get_amount(1)
     clear_screen_print_logo()
@@ -125,19 +52,16 @@ def add_recurring_transaction_process(user)
     end
     clear_screen_print_logo()
     choices = ["SET MAXIMUM FUTURE DATE (5 YEARS FROM TODAY)", "ENTER A DIFFERENT DATE"]
-    opt = TTY::Prompt.new.select("Select the starting date of the recurring transaction\n", choices)
+    opt = TTY::Prompt.new.select("Select the end date of the recurring transaction\n", choices)
     if opt == choices[0]
         end_date = get_date(3)
     else
         end_date = get_date(2)
     end
-
     clear_screen_print_logo()
     amount = get_amount(1)
-
     clear_screen_print_logo()
     description = get_transaction_description()
-    
     clear_screen_print_logo()
     category = get_transaction_category()
     clear_screen_print_logo()

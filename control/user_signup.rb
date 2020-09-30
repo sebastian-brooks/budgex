@@ -1,8 +1,8 @@
 require_relative("../classes/user")
-require_relative("../functions/clear_screen_leave_logo")
-require_relative("../functions/get_amount")
-require_relative("../functions/get_password")
-require_relative("../functions/get_username")
+require_relative("../methods/clear_screen_leave_logo")
+require_relative("../methods/get_amount")
+require_relative("../methods/get_password")
+require_relative("../methods/get_username")
 require("rainbow/refinement")
 using Rainbow
 

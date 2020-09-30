@@ -17,7 +17,7 @@ def username_capture
 end
 
 def check_username_in_users_list(username)
-    user_list = JSON.parse(File.read("users/users.json"))
+    user_list = JSON.parse(File.read("user_files/users.json"))
     user_list["users"].each { |user|
         if user["username"] == username
             clear_screen_print_logo()

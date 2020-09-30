@@ -1,5 +1,5 @@
-require_relative("clear_screen_leave_logo")
-require_relative("get_date")
+require_relative("../methods/clear_screen_leave_logo")
+require_relative("../methods/get_date")
 require("csv")
 require("rainbow/refinement")
 require("tty-prompt")
@@ -7,40 +7,34 @@ require("tty-table")
 using Rainbow
 
 def retrieve_stored_balance(user)
-    bal = {}
-    CSV.foreach("user_transactions/#{user.username}_balance.csv", headers: true).select { |row|
-        bal[:date] = row["date"]
-        bal[:balance] = row["balance"].to_f
+    balance = {}
+    CSV.foreach("user_files/#{user.username}_balance.csv", headers: true).select { |row|
+        balance[:date] = row["date"]
+        balance[:amount] = row["balance"].to_f
     }
-    return bal
+    return balance
 end
 
-def get_balance(user, fut=0, date=nil)
-    if fut == 1 && date.nil?
-        while date.nil?
-            clear_screen_print_logo()
-            puts "ENTER DATE TO CHECK BALANCE FOR"
-            puts "FORMAT: YYYY-MM-DD e.g. Dec 31st 1995 = 1995-12-31".color(:darkgray).italic
-            puts "Leave blank to use today's date".cyan.bright
-            date = get_date()
-        end
-    elsif fut == 0 && date.nil?
+def get_balance(user, type=0)
+    # type arg: 0 = today's date, 1 = select a date
+    if type == 0
         date = Date.today.to_s
+    else
+        date = get_date(1)
     end
-    bal_date = retrieve_stored_balance(user)[:date]
-    bal_amt = retrieve_stored_balance(user)[:balance]
-    CSV.foreach("user_transactions/#{user.username}_transactions.csv", headers: true).select { |row|
-        if row["date"] >= bal_date && row["date"] <= date
-            bal_amt += row["amount"].to_f
+    balance = retrieve_stored_balance(user)
+    CSV.foreach("user_files/#{user.username}_transactions.csv", headers: true).select { |row|
+        if row["date"] >= balance[:date] && row["date"] <= balance[:date]
+            balance[:amount] += row["amount"].to_f
         end
     }
-    case fut
+    case type
     when 0
-        table = TTY::Table.new(["  BALANCE  ".bright], [["  #{bal_amt.to_d}".color(:goldenrod)]])
+        table = TTY::Table.new(["  BALANCE  ".bright], [[" #{balance[:amount].to_f}".color(:crimson)]])
     when 1
-        table = TTY::Table.new(["  BALANCE AS OF #{date}  ".bright], [["  #{bal_amt.to_d}".color(:goldenrod)]])
+        table = TTY::Table.new(["  Balance as of #{Date.parse(date).strftime("%b %d %Y")}  ".bright], [[" #{balance[:amount].to_f}".color(:crimson)]])
     end
-    return [table, bal_amt]
+    return [table, balance[:amount]]
 end
 
 def sub_zero_balance_check(user)
@@ -48,7 +42,7 @@ def sub_zero_balance_check(user)
     date = Date.today.to_s
     sub_z = nil
     scary_dates = []
-    CSV.foreach("user_transactions/#{user.username}_transactions.csv", headers: true).select { |row|
+    CSV.foreach("user_files/#{user.username}_transactions.csv", headers: true).select { |row|
         if row["date"] >= date
             curr_bal += row["amount"].to_f
             if curr_bal < 0
@@ -62,7 +56,7 @@ def sub_zero_balance_check(user)
         puts "Great news! \n \nYou should have enough funds for all your scheduled expenses! \n \nKeep up the great work!".color(:lightgreen).bright
     else
         puts "OH SHIT!".color(:crimson).bright.underline.blink
-        puts "\nYOU WON'T HAVE ENOUGH MONEY ON #{scary_dates.sort[0]}!".color(:crimson).bright
+        puts "\nYOU WON'T HAVE ENOUGH MONEY ON #{Date.parse(scary_dates.sort[0]).strftime("%b %d %Y")}!".color(:crimson).bright
     end
     check_user_bal_preference(user)
 end

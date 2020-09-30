@@ -1,15 +1,17 @@
+require_relative("clear_screen_leave_logo")
 require("date")
 require("rainbow/refinement")
 using Rainbow
 
 def date_capture
-    "\nDATE FORMAT: YYYY-MM-DD e.g. Dec 31st 1995 = 1995-12-31\n".color(:darkgray).italic
+    puts "\nDATE FORMAT: YYYY-MM-DD e.g. Dec 31st 1995 = 1995-12-31\n".color(:darkgray).italic
     puts "ENTER DATE:"
     date = gets.chomp
     begin
         Date.iso8601(date)
     rescue ArgumentError
-        puts "\nINVALID DATE\n".red.bright
+        clear_screen_print_logo()
+        puts "\nINVALID DATE\n".color(:orange).bright
         date = nil
     end
     if date != nil && date.length < 10
@@ -31,7 +33,8 @@ def get_date(type=1)
     when 2
         while date.nil?
             date = date_capture()
-            if date < Date.today.prev_year(5).to_s || date > Date.today.next_year(5).to_s
+            if date != nil && (date < Date.today.prev_year(5).to_s || date > Date.today.next_year(5).to_s)
+                clear_screen_print_logo()
                 puts "Date is outside accepted range of 5 years past or future from today".color(:orange)
                 date = nil
             end

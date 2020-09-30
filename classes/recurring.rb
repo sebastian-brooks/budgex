@@ -11,12 +11,19 @@ class Recurring < Transaction
         @interval = interval
         @frequency = frequency
         @end_date = end_date
-        @transaction = {id: @id, date: @date, amount: @amount, description: @description, category: @category, recur: @recur}
+        @transaction = {
+            id: @id,
+            date: @date,
+            amount: @amount,
+            description: @description,
+            category: @category,
+            recur: @recur
+        }
     end
     
     def add
         recur = get_recurrence_dates()
-        CSV.open("user_transactions/#{@username}_transactions.csv", "a") do |row|
+        CSV.open("user_files/#{@username}_transactions.csv", "a") do |row|
             i = 0
             while i < recur.events.size
                 @transaction[:date] = recur.events[i]
@@ -26,7 +33,6 @@ class Recurring < Transaction
         end
     end
 
-    # generate all dates used in recurring transaction series
     def get_recurrence_dates
         if @interval == :week
             dw = Date.iso8601(@date).wday

@@ -6,7 +6,7 @@ require_relative("control/balance_checking")
 require_relative("control/search_transactions")
 require_relative("control/user_login")
 require_relative("control/user_signup")
-require_relative("functions/clear_screen_leave_logo")
+require_relative("methods/clear_screen_leave_logo")
 require("rainbow/refinement")
 require("tty-prompt")
 require("tty-table")
@@ -33,8 +33,8 @@ end
 # Main program navigation/process
 while true
     clear_screen_print_logo()
-    balance = get_balance(user, 0, Date.today.to_s)[0]
-    puts balance.render(:ascii)
+    balance = get_balance(user)
+    puts balance[0].render(:ascii)
     choices = [
         "ADD TRANSACTION",
         "SEARCH TRANSACTIONS",

@@ -14,19 +14,19 @@ class User
 
     def add
         new_user = {"username" => @username, "password" => @password}
-        user_list = JSON.parse(File.read("users/users.json"))
+        user_list = JSON.parse(File.read("user_files/users.json"))
         user_list["users"] << new_user
-        File.write("users/users.json", JSON.generate(user_list))
+        File.write("user_files/users.json", JSON.generate(user_list))
     end
 
     def create_transactions_csv
-        CSV.open("user_transactions/#{@username}_transactions.csv", "w") do |row|
+        CSV.open("user_files/#{@username}_transactions.csv", "w") do |row|
             row << ["id", "date", "amount", "description", "category", "recur"]
         end
     end
 
     def create_balance_csv(balance)
-        CSV.open("user_transactions/#{@username}_balance.csv", "w") do |row|
+        CSV.open("user_files/#{@username}_balance.csv", "w") do |row|
             row << ["date", "balance"]
             row << [Date.today.to_s, balance]
         end
@@ -34,7 +34,7 @@ class User
 
     def confirm_login_details
         result = nil
-        user_list = JSON.parse(File.read("users/users.json"))
+        user_list = JSON.parse(File.read("user_files/users.json"))
         user_list["users"].each { |user|
             if user["username"] == @username && user["password"] == @password
                 result = 1
@@ -65,20 +65,20 @@ class User
     end
 
     def update_password(new_password)
-        user_list = JSON.parse(File.read("users/users.json"))
+        user_list = JSON.parse(File.read("user_files/users.json"))
         user_list["users"].each { |user|
             if user["username"] == @username
                 user["password"] = new_password
                 @password = new_password
             end
         }
-        File.write("users/users.json", JSON.generate(user_list))
+        File.write("user_files/users.json", JSON.generate(user_list))
     end
 
     def sort_transactions
-        transactions = CSV.read("user_transactions/#{@username}_transactions.csv", headers: true)
+        transactions = CSV.read("user_files/#{@username}_transactions.csv", headers: true)
         transactions = transactions.sort { |a, b| a[1] <=> b[1] }
-        CSV.open("user_transactions/#{@username}_transactions.csv", "w") do |row|
+        CSV.open("user_files/#{@username}_transactions.csv", "w") do |row|
             row << ["id", "date", "amount", "description", "category", "recur"]
             transactions.each { |transaction| row << transaction }
         end
@@ -86,7 +86,7 @@ class User
 
     def generate_new_transaction_id
         id = []
-        CSV.foreach("user_transactions/#{@username}_transactions.csv", headers: true) { |row| id << row["id"].to_i }
+        CSV.foreach("user_files/#{@username}_transactions.csv", headers: true) { |row| id << row["id"].to_i }
         if id.size == 0
             id << 0
         end
@@ -94,13 +94,13 @@ class User
     end
 
     def delete_user_files
-        File.delete("user_transactions/#{@username}_transactions.csv")
-        File.delete("user_transactions/#{@username}_balance.csv")
+        File.delete("user_files/#{@username}_transactions.csv")
+        File.delete("user_files/#{@username}_balance.csv")
     end
     
     def delete_user_login
-        user_list = JSON.parse(File.read("users/users.json"))
+        user_list = JSON.parse(File.read("user_files/users.json"))
         user_list["users"].delete_if { |user| user["username"] == @username }
-        File.write("users/users.json", JSON.generate(user_list))
+        File.write("user_files/users.json", JSON.generate(user_list))
     end
 end

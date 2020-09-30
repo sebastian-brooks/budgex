@@ -1,9 +1,9 @@
 require_relative("../classes/recurring")
 require_relative("../classes/transaction")
-require_relative("../control/add_transaction")
-require_relative("clear_screen_leave_logo")
-require_relative("get_amount")
-require_relative("get_date")
+require_relative("../methods/clear_screen_leave_logo")
+require_relative("../methods/get_amount")
+require_relative("../methods/get_date")
+require_relative("add_transaction")
 require("rainbow/refinement")
 require("tty-prompt")
 using Rainbow
@@ -11,7 +11,7 @@ using Rainbow
 def get_transaction_by_id_date(user, id, date)
     transaction = nil
     while transaction.nil?
-        data = CSV.read("user_transactions/#{user.username}_transactions.csv", headers: true)
+        data = CSV.read("user_files/#{user.username}_transactions.csv", headers: true)
         data.each { |row|
             if row["id"].to_s == id && date.nil?
                 transaction = Transaction.new(user.username, id.to_i, row["date"], row["amount"].to_f, row["description"], row["category"], row["recur"].to_i)
@@ -25,18 +25,18 @@ def get_transaction_by_id_date(user, id, date)
 end
 
 def delete_transaction_by_id(user, transaction)
-    user_trans = CSV.read("user_transactions/#{user.username}_transactions.csv", headers: true)
+    user_trans = CSV.read("user_files/#{user.username}_transactions.csv", headers: true)
     user_trans.delete_if { |row| row["id"].to_i == transaction.id.to_i }
-    CSV.open("user_transactions/#{user.username}_transactions.csv", "w", headers: true) do |row|
+    CSV.open("user_files/#{user.username}_transactions.csv", "w", headers: true) do |row|
         row << ["id", "date", "amount", "description", "category", "recur"]
         user_trans.each { |trans| row << trans }
     end
 end
 
 def delete_transaction_by_date_id(user, transaction)
-    user_trans = CSV.read("user_transactions/#{user.username}_transactions.csv", headers: true)
+    user_trans = CSV.read("user_files/#{user.username}_transactions.csv", headers: true)
     user_trans.delete_if { |row| row["id"].to_i == transaction.id.to_i && row["date"] == transaction.date }
-    CSV.open("user_transactions/#{user.username}_transactions.csv", "w", headers: true) do |row|
+    CSV.open("user_files/#{user.username}_transactions.csv", "w", headers: true) do |row|
         row << ["id", "date", "amount", "description", "category", "recur"]
         user_trans.each { |trans| row << trans }
     end
