@@ -8,18 +8,6 @@ require("rainbow/refinement")
 require("tty-prompt")
 using Rainbow
 
-# def get_transaction_amount
-#     choices = ["EXPENSE", "INCOME"]
-#     opt = TTY::Prompt.new.select("Is this income or an expense?", choices)
-#     puts "\nENTER THE AMOUNT OF THE TRANSACTION"
-#     puts "FORMAT: whole number or decimal e.g. 9.25".color(:darkgray).italic
-#     amount = get_amount()
-#     if opt == choices[0]
-#         amount = -amount
-#     end
-#     return amount
-# end
-
 def get_transaction_description
     description = nil
     while description.nil?
