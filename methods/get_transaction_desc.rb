@@ -9,10 +9,11 @@ def get_transaction_description
         description = gets.chomp
         if description.empty? || description.strip().empty?
             description = nil
-            puts "DO NOT TAKE ME FOR A FOOL - YOU MUST ENTER A DESCRIPTION".color(:orange)
+            puts "Nothing submitted - please enter a description".color(:orange)
         elsif description.length > 50
             description = description.gsub(",", "")[0..49]
         end
     end
+
     return description
 end

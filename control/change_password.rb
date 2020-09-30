@@ -6,8 +6,8 @@ using Rainbow
 
 def change_password_process(user)
     clear_screen_print_logo()
-    puts "Sure, you can change your password"
-    puts "\nBut first, confirm your current password coz fraud 'n' that\n".color(:darkgray).italic
+    puts "Please confirm your current password\n".color(:darkgray).italic
+    
     attempts = 0
     result = nil
     while attempts < 3 && result.nil?
@@ -16,11 +16,13 @@ def change_password_process(user)
         result = user.confirm_password(password)
         clear_screen_print_logo()
     end
+
     if attempts >= 3
         puts "\nToo many attempts. You'd be a better lumberjack what with all this hacking".color(:indigo).bright
         sleep(3)
     end
-    if ! result.nil?
+
+    if !result.nil?
         clear_screen_print_logo()
         puts "Time to enter your new password"
         puts "\n"

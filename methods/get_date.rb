@@ -7,6 +7,7 @@ def date_capture
     puts "\nDATE FORMAT: YYYY-MM-DD e.g. Dec 31st 1995 = 1995-12-31\n".color(:darkgray).italic
     puts "ENTER DATE:"
     date = gets.chomp
+
     begin
         Date.iso8601(date)
     rescue ArgumentError
@@ -14,13 +15,15 @@ def date_capture
         puts "\nINVALID DATE\n".color(:orange).bright
         date = nil
     end
+
     if date != nil && date.length < 10
         date = Date.strptime(date, "%y-%m-%d")
     end
+
     return date
 end
 
-def get_date(type=1)
+def get_date(type = 1)
     # type arg: 0 for today's date, 1 for search date, 2 for adding a trans date, 3 for max future date (5 years from today)
     date = nil
     case type
@@ -42,5 +45,6 @@ def get_date(type=1)
     when 3
         date = Date.today.next_year(5).to_s
     end
+    
     return date
 end

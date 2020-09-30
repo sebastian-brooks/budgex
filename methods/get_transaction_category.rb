@@ -13,5 +13,6 @@ def get_transaction_category
         "OTHER"
     ]
     category = TTY::Prompt.new.select("SELECT A CATEGORY THAT BEST DESCRIBES THE TRANSACTION", category_list)
+    
     return category
 end

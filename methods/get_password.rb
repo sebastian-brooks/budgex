@@ -13,16 +13,17 @@ def password_capture
             puts "\nNo password submitted - please enter a password\n".color(:orange).bright
         end
     end
+
     return password
 end
 
-def get_password(type=1)
+def get_password(type = 1)
     # type arg: 0 for new password creation, 1 for standard password capture
     if type == 0
         password = nil
         while password.nil?
             password = password_capture()
-            if ! password.length.between?(8,16) || password.match(" ") || password.empty?
+            if !password.length.between?(8,16) || password.match(" ") || password.empty?
                 clear_screen_print_logo()
                 puts "PASSWORD DOES NOT MEET CRITERIA".red.bright
                 puts "\nPassword must consist of 8 to 16 characters with no spaces\n".color(:darkgray).italic
@@ -32,5 +33,6 @@ def get_password(type=1)
     else
         password = password_capture()
     end
+    
     return password
 end

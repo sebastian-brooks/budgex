@@ -16,38 +16,56 @@ def get_transaction_by_id_date(user, id, date)
         data = CSV.read("user_files/#{user.username}_transactions.csv", headers: true)
         data.each { |row|
             if row["id"].to_s == id && date.nil?
-                transaction = Transaction.new(user.username, id.to_i, row["date"], row["amount"].to_f, row["description"], row["category"], row["recur"].to_i)
+                transaction = Transaction.new(
+                    user.username,
+                    id.to_i,
+                    row["date"],
+                    row["amount"].to_f,
+                    row["description"],
+                    row["category"],
+                    row["recur"].to_i
+                )
             elsif row["id"].to_s == id && row["date"] == date
-                transaction = Transaction.new(user.username, id.to_i, row["date"], row["amount"].to_f, row["description"], row["category"], row["recur"].to_i)
+                transaction = Transaction.new(
+                    user.username,
+                    id.to_i,
+                    row["date"],
+                    row["amount"].to_f,
+                    row["description"],
+                    row["category"],
+                    row["recur"].to_i
+                )
             end
         }
-        puts "\nINVALID ID\n".red.bright if transaction.nil?
+        puts "INVALID ID\n".red.bright if transaction.nil?
     end
+
     return transaction
 end
 
-def delete_transaction_by_id(user, transaction)
+def delete_transaction(user, transaction, type = 1)
+    # type arg: 0 = delete by id, 1 = delete by date & id
     user_trans = CSV.read("user_files/#{user.username}_transactions.csv", headers: true)
-    user_trans.delete_if { |row| row["id"].to_i == transaction.id.to_i }
-    CSV.open("user_files/#{user.username}_transactions.csv", "w", headers: true) do |row|
-        row << ["id", "date", "amount", "description", "category", "recur"]
-        user_trans.each { |trans| row << trans }
-    end
-end
 
-def delete_transaction_by_date_id(user, transaction)
-    user_trans = CSV.read("user_files/#{user.username}_transactions.csv", headers: true)
-    user_trans.delete_if { |row| row["id"].to_i == transaction.id.to_i && row["date"] == transaction.date }
-    CSV.open("user_files/#{user.username}_transactions.csv", "w", headers: true) do |row|
+    case type
+    when 0
+        user_trans.delete_if { |row| row["id"].to_i == transaction.id.to_i }
+    when 1
+        user_trans.delete_if { |row|
+            row["id"].to_i == transaction.id.to_i && row["date"] == transaction.date
+        }
+    end
+
+    CSV.open("user_files/#{user.username}_transactions.csv", "w", headers: true) { |row|
         row << ["id", "date", "amount", "description", "category", "recur"]
         user_trans.each { |trans| row << trans }
-    end
+    }
 end
 
 def display_selected_transaction(transaction)
     clear_screen_print_logo()
     puts "CURRENTLY EDITING:".color(:crimson).underline
-    puts "ID:           #{transaction.id}".bright
+    puts "ID:           #{transaction.id}"
     puts "DATE:         #{transaction.date}"
     puts "AMOUNT:       #{transaction.amount}"
     puts "DESCRIPTION:  #{transaction.description}"
@@ -58,7 +76,14 @@ def edit_single_transaction(user, transaction)
     edit = true
     while edit
         display_selected_transaction(transaction)
-        choices = ["EDIT DATE", "EDIT AMOUNT", "EDIT DESCRIPTION", "EDIT CATEGORY", "EDIT ALL DETAILS", "EDITING COMPLETE"]
+        choices = [
+            "EDIT DATE",
+            "EDIT AMOUNT",
+            "EDIT DESCRIPTION",
+            "EDIT CATEGORY",
+            "EDIT ALL DETAILS",
+            "EDITING COMPLETE"
+        ]
         opt = TTY::Prompt.new.select("", choices)
         case opt
         when choices[0]
@@ -73,7 +98,14 @@ def edit_single_transaction(user, transaction)
             add_single_transaction_process(user)
             edit = false
         when choices[5]
-            transaction.transaction = {id: transaction.id, date: transaction.date, amount: transaction.amount, description: transaction.description, category: transaction.category, recur: 0}
+            transaction.transaction = {
+                id: transaction.id,
+                date: transaction.date,
+                amount: transaction.amount,
+                description: transaction.description,
+                category: transaction.category,
+                recur: 0
+            }
             transaction.add()
             user.sort_transactions
             clear_screen_print_logo()
@@ -95,7 +127,7 @@ def edit_transaction_process(user)
         date = get_date(1)
         transaction = get_transaction_by_id_date(user, id, date)
         if transaction.recur == 0 && opt == choices[0] # edit single
-            delete_transaction_by_id(user, transaction)
+            delete_transaction(user, transaction, 0)
             edit_single_transaction(user, transaction)
             run = false
         elsif transaction.recur == 0 && opt == choices[1] # delete single
@@ -103,7 +135,7 @@ def edit_transaction_process(user)
             opt = TTY::Prompt.new.select("\nAre you sure you want to delete this transaction?".color(:orange), choices)
             case opt
             when choices[1]
-                delete_transaction_by_id(user, transaction)
+                delete_transaction(user, transaction, 0)
                 puts "Deletion successful".color(:orange)
                 sleep(2)
             end
@@ -111,13 +143,13 @@ def edit_transaction_process(user)
         elsif transaction.recur == 1
             display_selected_transaction(transaction)
             recur_choice = ["THIS TRANSACTION", "ENTIRE SERIES"]
-            recur_opt = TTY::Prompt.new.select("\nThis is part of a recurring series of transactions. \nShould this action affect the entire series, or just this instance?".color(:orange), recur_choice)
+            recur_opt = TTY::Prompt.new.select("\nThis is part of a recurring series of transactions.\nShould this action affect the entire series, or just this instance?".color(:orange), recur_choice)
             if recur_opt == recur_choice[0] && opt == choices[0] # edit single instance of recurring
-                delete_transaction_by_date_id(user, transaction)
+                delete_transaction(user, transaction, 1)
                 edit_single_transaction(user, transaction)
                 run = false
             elsif recur_opt == recur_choice[1] && opt == choices[0] # edit entire series of recurring
-                delete_transaction_by_id(user, transaction)
+                delete_transaction(user, transaction, 0)
                 puts "OK, time to set up the series again!"
                 sleep(2)
                 add_recurring_transaction_process(user)
@@ -127,7 +159,7 @@ def edit_transaction_process(user)
                 opt = TTY::Prompt.new.select("\nAre you sure you want to delete this transaction?".color(:orange), choices)
                 case opt
                 when choices[1]
-                    delete_transaction_by_date_id(user, transaction)
+                    delete_transaction(user, transaction, 1)
                     puts "Deletion successful".color(:orange)
                     sleep(2)
                 end
@@ -137,7 +169,7 @@ def edit_transaction_process(user)
                 opt = TTY::Prompt.new.select("\nAre you sure you want to delete all transactions in this recurring series?".color(:orange), choices)
                 case opt
                 when choices[1]
-                    delete_transaction_by_id(user, transaction)
+                    delete_transaction(user, transaction, 0)
                     puts "Deletion successful".color(:orange)
                     sleep(2)
                 end

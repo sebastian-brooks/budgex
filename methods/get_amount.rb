@@ -13,6 +13,7 @@ def amount_capture
             puts "\nNo amount submitted - please enter an amount\n".color(:orange).bright
         end
     end
+
     return amount
 end
 
@@ -31,7 +32,7 @@ def amount_error_check(amount)
     end
 end
 
-def get_amount(type=1)
+def get_amount(type = 1)
     # type arg: 0 for initial balance amount, 1 for transaction amount
     amount = nil
     if type == 0
@@ -51,5 +52,6 @@ def get_amount(type=1)
         amount = amount.to_f.abs
         amount = -amount if opt == choices[0]
     end
+    
     return amount
 end

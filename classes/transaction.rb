@@ -2,7 +2,7 @@ require("csv")
 
 class Transaction
     attr_accessor :id, :date, :amount, :description, :category, :recur, :transaction
-    def initialize(username, id, date, amount, description, category, recur=0)
+    def initialize(username, id, date, amount, description, category, recur = 0)
         @username = username
         @id = id
         @date = date
@@ -21,8 +21,8 @@ class Transaction
     end
 
     def add
-        CSV.open("user_files/#{@username}_transactions.csv", "a") do |row|
+        CSV.open("user_files/#{@username}_transactions.csv", "a") { |row|
             row << @transaction.values.to_a
-        end
+        }
     end
 end
