@@ -14,7 +14,7 @@ require("tty-table")
 using Rainbow
 
 @cli_options = {}
-cli = OptionParser.new do |opts|
+op = OptionParser.new do |opts|
     opts.on("-l", "--login", "provide valid username & password to open at main menu") do
         @cli_options[:login] = true
         @cli_options[:username] = ARGV[0]
