@@ -8,8 +8,9 @@ Track incoming and outgoing money by inputting expense/income transactions and s
 
 ## Requirements
 
-- Ruby (~v2.7.1 or higher)
+- Mac/Linux/Windows computer with at least 4GB RAM
 - Bash scripting shell
+- Ruby (~v2.7.1 or higher)
 
 ---
 
