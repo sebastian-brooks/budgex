@@ -23,3 +23,5 @@ gem "json", "~> 2.3"
 gem "tty-table", "~> 0.12.0"
 
 gem "tty-font", "~> 0.5.0"
+
+gem "optparse", "~> 0.1.0"

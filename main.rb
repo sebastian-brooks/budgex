@@ -7,13 +7,56 @@ require_relative("control/search_transactions")
 require_relative("control/user_login")
 require_relative("control/user_signup")
 require_relative("methods/clear_screen_leave_logo")
+require("optparse")
 require("rainbow/refinement")
 require("tty-prompt")
 require("tty-table")
 using Rainbow
 
-# Login/signup process
+@cli_options = {}
+cli = OptionParser.new do |opts|
+    opts.on("-l", "--login", "provide valid username & password to open at main menu") do
+        @cli_options[:login] = true
+        @cli_options[:username] = ARGV[0]
+        @cli_options[:password] = ARGV[1]
+    end
+    
+    opts.on("-b", "--balance", "provide valid username & password to get quick balance") do
+        @cli_options[:balance] = true
+        @cli_options[:username] = ARGV[0]
+        @cli_options[:password] = ARGV[1]
+    end
+end
+op.parse!
+
 user = nil
+
+# Command line argument actions
+if @cli_options[:login] == true
+    user = User.new(@cli_options[:username], @cli_options[:password])
+    confirmed = user.confirm_login_details()
+    if confirmed != 1
+        puts "Invalid login credentials".color(:crimson)
+        exit
+    end
+elsif @cli_options[:balance] == true
+    user = User.new(@cli_options[:username], @cli_options[:password])
+    confirmed = user.confirm_login_details()
+    system("clear")
+    if confirmed == 1
+        balance = get_balance(user)
+        puts balance[0].render(:ascii)
+        exit
+    else
+        puts "Invalid login credentials".color(:crimson)
+        exit
+    end
+elsif ARGV.size >= 1
+    puts "Invalid argument options".color(:crimson)
+    exit
+end
+
+# Login/signup process
 while user.nil?
     clear_screen_print_logo()
     choices = ["SIGNUP", "LOGIN", "EXIT"]
@@ -31,7 +74,7 @@ while user.nil?
 end
 
 # Main program navigation/process
-while true
+loop do
     clear_screen_print_logo()
     balance = get_balance(user)
     puts balance[0].render(:ascii)
@@ -59,7 +102,7 @@ while true
         exit
     when choices[5]
         system "clear"
-        puts "Thanks for stopping by. Watch your back.".color(:darksalmon)
+        puts "Thanks for stopping by".color(:crimson)
         exit
     end
 end
