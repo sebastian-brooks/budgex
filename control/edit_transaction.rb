@@ -12,33 +12,31 @@ using Rainbow
 
 def get_transaction_by_id_date(user, id, date)
     transaction = nil
-    while transaction.nil?
-        data = CSV.read("user_files/#{user.username}_transactions.csv", headers: true)
-        data.each { |row|
-            if row["id"].to_s == id && date.nil?
-                transaction = Transaction.new(
-                    user.username,
-                    id.to_i,
-                    row["date"],
-                    row["amount"].to_f,
-                    row["description"],
-                    row["category"],
-                    row["recur"].to_i
-                )
-            elsif row["id"].to_s == id && row["date"] == date
-                transaction = Transaction.new(
-                    user.username,
-                    id.to_i,
-                    row["date"],
-                    row["amount"].to_f,
-                    row["description"],
-                    row["category"],
-                    row["recur"].to_i
-                )
-            end
-        }
-        puts "INVALID ID\n".red.bright if transaction.nil?
-    end
+    data = CSV.read("user_files/#{user.username}_transactions.csv", headers: true)
+    data.each { |row|
+        if row["id"].to_s == id && date.nil?
+            transaction = Transaction.new(
+                user.username,
+                id.to_i,
+                row["date"],
+                row["amount"].to_f,
+                row["description"],
+                row["category"],
+                row["recur"].to_i
+            )
+        elsif row["id"].to_s == id && row["date"] == date
+            transaction = Transaction.new(
+                user.username,
+                id.to_i,
+                row["date"],
+                row["amount"].to_f,
+                row["description"],
+                row["category"],
+                row["recur"].to_i
+            )
+        end
+    }
+    puts "INVALID ID\n".red.bright if transaction.nil?
 
     return transaction
 end
@@ -121,11 +119,14 @@ def edit_transaction_process(user)
     while run
         choices = ["EDIT TRANSACTION", "DELETE TRANSACTION"]
         opt = TTY::Prompt.new.select("", choices)
-        puts "\nENTER THE ID OF THE TRANSACTION"
-        id = gets.chomp
-        puts "\nCONFIRM THE DATE OF THE TRANSACTION"
-        date = get_date(1)
-        transaction = get_transaction_by_id_date(user, id, date)
+        transaction = nil
+        while transaction.nil?
+            puts "\nENTER THE ID OF THE TRANSACTION"
+            id = gets.chomp
+            puts "\nCONFIRM THE DATE OF THE TRANSACTION"
+            date = get_date(1)
+            transaction = get_transaction_by_id_date(user, id, date)
+        end
         if transaction.recur == 0 && opt == choices[0] # edit single
             delete_transaction(user, transaction, 0)
             edit_single_transaction(user, transaction)

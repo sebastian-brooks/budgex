@@ -11,7 +11,6 @@ def date_capture
     begin
         Date.iso8601(date)
     rescue ArgumentError
-        clear_screen_print_logo()
         puts "\nINVALID DATE\n".color(:orange).bright
         date = nil
     end

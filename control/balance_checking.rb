@@ -100,8 +100,10 @@ def check_balance_process(user)
             clear_screen_print_logo()
             puts table.render(:ascii)
             check_user_bal_preference(user)
+            run = false
         when choices[1]
             sub_zero_balance_check(user)
+            run = false
         when choices[2]
             run = false
         end
