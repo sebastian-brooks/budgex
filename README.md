@@ -9,10 +9,9 @@ Track incoming and outgoing money by inputting expense/income transactions and s
 ## Requirements
 
 - Mac/Windows/Linux computer with at least 4GB RAM
-- Bash scripting shell
-    - Terminal (Mac)
-    - Ubuntu (Windows)
-    - Bash (Linux)
+
+- Bash scripting shell: Terminal (Mac), Ubuntu (Windows), Bash (Linux)
+
 - Ruby (~v2.7.1 or higher)
 - [Bundler](https://bundler.io/)
 
@@ -33,10 +32,17 @@ There are several Ruby Gems required that will be installed when the Installatio
 
 1. Clone [GitHub repository](https://github.com/sthobropdr/budgex.git)
 
-2. After cloning the repository, open your computer's CLI and navigate to the root directory of local repository of Budgex
+    - To clone the GitHub respository, create a new folder for the app where you would like the app to be stored, and in your computer's command line terminal, type `git clone https://github.com/sthobropdr/budgex.git` and press enter
 
-3. Run the app by typing `sh run_app.sh`
-    - Note that all dependencies will install at this time
+2. After cloning the repository, there should now be a new folder named 'budgex' in the folder you added in step 1
+    - Go into the new 'budgex' folder by typing `cd budgex`
+    - Make sure there is a file in 'budgex' named `budgex_install.sh`
+
+3. Install the app by typing `sh budgex_install.sh`
+    - All dependencies will install at this time
+    - To run the app in future after initial installation, you can type `ruby main.rb` from the root 'budgex' folder
+
+If you have any issues with downloading, installing or running the app, please email cab022014@coderacademy.edu.au
 
 ---
 
@@ -106,7 +112,7 @@ Search future balances and check to see if there is a point in the future where 
 
 ## Command Line Arguments
 
-After successfully signing in to BudgEx, you will now have access to the optional command line arguments.
+After successfully signing up in BudgEx, you will have access to the optional command line arguments when launching the app.
 
 ### Argument options
 
