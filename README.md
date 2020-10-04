@@ -8,9 +8,24 @@ Track incoming and outgoing money by inputting expense/income transactions and s
 
 ## Requirements
 
-- Mac/Linux/Windows computer with at least 4GB RAM
+- Mac/Windows/Linux computer with at least 4GB RAM
 - Bash scripting shell
+    - Terminal (Mac)
+    - Ubuntu (Windows)
+    - Bash (Linux)
 - Ruby (~v2.7.1 or higher)
+- [Bundler](https://bundler.io/)
+
+### Dependencies
+
+There are several Ruby Gems required that will be installed when the Installation process is run:
+
+- tty-prompt
+- tty-table
+- tty-font
+- rainbow
+- recurrence
+- optparse
 
 ---
 
